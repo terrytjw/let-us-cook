@@ -1,8 +1,11 @@
 "use client";
 
+import React from "react";
 import { createClient } from "@/lib/supabase/client";
 
-const LoginPage = () => {
+import { Button } from "./ui/button";
+
+const LoginButton = () => {
   const supabase = createClient();
 
   const loginWithGoogle = () => {
@@ -14,13 +17,7 @@ const LoginPage = () => {
     });
   };
 
-  return (
-    <main className="flex items-center justify-center">
-      <button className=" border border-black p-4" onClick={loginWithGoogle}>
-        Sign in with Google
-      </button>
-    </main>
-  );
+  return <Button onClick={loginWithGoogle}>Login</Button>;
 };
 
-export default LoginPage;
+export default LoginButton;

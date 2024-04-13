@@ -7,7 +7,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "update-db": "npx drizzle-kit push:pg",
+    "pull-db": "npx drizzle-kit introspect:pg",
+    "studio": "npx drizzle-kit studio",
+    "generate-migration": "drizzle-kit generate:pg"
   },
   "dependencies": {
     "@auth/core": "^0.29.0",
@@ -16,9 +20,11 @@
     "@radix-ui/react-slot": "^1.0.2",
     "@supabase/ssr": "^0.3.0",
     "@supabase/supabase-js": "^2.42.3",
+    "@tanstack/react-query": "^5.29.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "drizzle-orm": "^0.30.8",
+    "lucide-react": "^0.368.0",
     "next": "14.2.0",
     "next-auth": "^4.24.7",
     "postgres": "^3.4.4",
@@ -28,6 +34,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^5.28.11",
     "@types/node": "^20.12.7",
     "@types/react": "^18.2.77",
     "@types/react-dom": "^18.2.25",

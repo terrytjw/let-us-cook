@@ -1,0 +1,27 @@
+{
+  "version": "5",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1712997816435,
+      "tag": "0000_bent_xavin",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1712999609418,
+      "tag": "0001_high_eternity",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1713001710846,
+      "tag": "0002_goofy_silhouette",
+      "breakpoints": true
+    }
+  ]
+}
