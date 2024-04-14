@@ -102,4 +102,5 @@ export const Icons = {
   check: Check,
   import: Import,
   version: GitMerge,
+  loading: Loader2,
 };

@@ -15,7 +15,7 @@ export const useDeleteItemMutation = () => {
       queryClient.invalidateQueries({ queryKey: ["items"] });
 
       toast({
-        title: "Item deleted successfully",
+        title: "Item deleted",
       });
     },
     onError: (error) => {

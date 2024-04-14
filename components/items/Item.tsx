@@ -4,6 +4,7 @@ import React from "react";
 import { useDeleteItemMutation } from "@/hooks/items/useDeleteItem";
 
 import { Button } from "../ui/button";
+import { Icons } from "../Icons";
 
 type ItemProps = {
   item: Item;
@@ -24,7 +25,14 @@ const Item = ({ item }: ItemProps) => {
           onClick={() => deleteItem(item.id)}
           disabled={isDeleteItemLoading}
         >
-          {isDeleteItemLoading ? "Deleting..." : "Delete"}
+          {isDeleteItemLoading ? (
+            <div className="flex items-center gap-2">
+              {" "}
+              <Icons.loading className="h-4 w-4 animate-spin" /> Deleting...
+            </div>
+          ) : (
+            "Delete"
+          )}
         </Button>
       </div>
     </div>

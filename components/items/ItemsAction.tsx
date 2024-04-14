@@ -4,6 +4,7 @@ import React from "react";
 import { useAddItemMutation } from "@/hooks/items/useAddItem";
 
 import { Button } from "../ui/button";
+import { Icons } from "../Icons";
 
 type ItemsActionProps = {
   userId: string;
@@ -12,14 +13,20 @@ const ItemsAction = ({ userId }: ItemsActionProps) => {
   const { addItem, isAddItemLoading } = useAddItemMutation(userId);
 
   return (
-    <main className="py-4">
-      <h1 className="py-4 text-xl">ItemsAction</h1>
+    <main>
       <Button
         onClick={() => addItem()}
-        disabled={isAddItemLoading} // disable button during loading
+        disabled={isAddItemLoading}
         aria-label="Add an item" // accessibility label
       >
-        {isAddItemLoading ? "Adding..." : "Add Item"}
+        {isAddItemLoading ? (
+          <div className="flex items-center gap-2">
+            {" "}
+            <Icons.loading className="h-4 w-4 animate-spin" /> Adding...
+          </div>
+        ) : (
+          "+ Add Item"
+        )}
       </Button>
     </main>
   );

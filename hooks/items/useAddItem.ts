@@ -22,7 +22,7 @@ export const useAddItemMutation = (userId: string) => {
       queryClient.invalidateQueries({ queryKey: ["items"] });
 
       toast({
-        title: "Item added successfully",
+        title: "Item added",
         duration: 2000,
       });
     },

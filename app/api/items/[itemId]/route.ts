@@ -48,8 +48,6 @@ export const DELETE = async (
       );
     }
 
-    console.log("Deleted item -> ", params.itemId);
-
     return NextResponse.json(null, { status: 200 });
   } catch (error) {
     if (error instanceof z.ZodError) {
