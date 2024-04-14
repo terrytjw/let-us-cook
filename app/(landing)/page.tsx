@@ -18,9 +18,14 @@ const Home = async () => {
           </Button>
         </div>
       </div>
-      <h1 className="text-7xl font-semibold tracking-[-0.08em]">
-        Next<span className="text-primary">Gen</span>.
-      </h1>
+      <div>
+        <h1 className="mt-28 text-7xl font-semibold tracking-[-0.08em]">
+          Next<span className="text-primary">Gen</span>.
+        </h1>
+        <p className="text-center font-medium text-gray-300">
+          Absolute kickass Next.js template 🔥
+        </p>
+      </div>
     </main>
   );
 };
