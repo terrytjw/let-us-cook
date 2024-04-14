@@ -14,8 +14,6 @@
     "generate-migration": "drizzle-kit generate:pg"
   },
   "dependencies": {
-    "@auth/core": "^0.29.0",
-    "@auth/drizzle-adapter": "^0.9.0",
     "@radix-ui/react-icons": "^1.3.0",
     "@radix-ui/react-separator": "^1.0.3",
     "@radix-ui/react-slot": "^1.0.2",
@@ -30,7 +28,6 @@
     "drizzle-orm": "^0.30.8",
     "lucide-react": "^0.368.0",
     "next": "14.2.0",
-    "next-auth": "^4.24.7",
     "postgres": "^3.4.4",
     "react": "^18",
     "react-dom": "^18",
