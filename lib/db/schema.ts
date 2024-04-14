@@ -1,11 +1,4 @@
-import {
-  integer,
-  pgTable,
-  serial,
-  text,
-  timestamp,
-  varchar,
-} from "drizzle-orm/pg-core";
+import { pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
   id: text("id").primaryKey(),
@@ -16,10 +9,10 @@ export const users = pgTable("users", {
 
 export const items = pgTable("items", {
   id: serial("id").primaryKey(),
-  userId: integer("userId")
+  userId: text("userId")
     .references(() => users.id, { onDelete: "cascade" })
     .notNull(),
-  name: text("name"),
-  price: integer("price"),
-  description: text("description"),
+  name: text("name").notNull(),
+  price: text("price").notNull(),
+  description: text("description").notNull(),
 });

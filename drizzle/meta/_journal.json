@@ -22,6 +22,27 @@
       "when": 1713001710846,
       "tag": "0002_goofy_silhouette",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1713018649208,
+      "tag": "0003_supreme_galactus",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1713018942710,
+      "tag": "0004_overjoyed_psynapse",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1713022859967,
+      "tag": "0005_orange_omega_sentinel",
+      "breakpoints": true
     }
   ]
 }

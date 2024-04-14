@@ -2,6 +2,8 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
 import LogoutButton from "@/components/LogoutButton";
+import ItemsList from "@/components/items/ItemsList";
+import ItemsAction from "@/components/items/ItemsAction";
 
 // stub page: only able to see page when logged in
 const PrivatePage = async () => {
@@ -19,7 +21,8 @@ const PrivatePage = async () => {
         HELLO{" "}
         <span className="font-semibold text-primary">{data.user.email}</span>
       </p>
-      <div>more data here</div>
+      <ItemsList />
+      <ItemsAction userId={data.user.id} />
       <LogoutButton />
     </main>
   );
