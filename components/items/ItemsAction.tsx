@@ -14,11 +14,7 @@ const ItemsAction = ({ userId }: ItemsActionProps) => {
 
   return (
     <main>
-      <Button
-        onClick={() => addItem()}
-        disabled={isAddItemLoading}
-        aria-label="Add an item" // accessibility label
-      >
+      <Button onClick={() => addItem()} disabled={isAddItemLoading}>
         {isAddItemLoading ? (
           <div className="flex items-center gap-2">
             {" "}

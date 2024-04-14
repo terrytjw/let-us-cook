@@ -8,7 +8,7 @@ import ItemsAction from "@/components/items/ItemsAction";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 
-// stub page: only able to see page when logged in
+// only able to see page when logged in
 const PrivatePage = async () => {
   const supabase = createClient();
 

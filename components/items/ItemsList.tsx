@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 import Item from "./Item";
+import { Icons } from "../Icons";
 
 const ItemsList = () => {
   const fetchItems = async () => {
@@ -18,11 +19,17 @@ const ItemsList = () => {
   });
 
   if (isItemsLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="mt-4 flex items-center gap-2">
+        <Icons.loading className="h-4 w-4 animate-spin" /> Items Loading...
+      </div>
+    );
   }
 
-  if (!items) {
-    return <div>No items found</div>;
+  if (!items || items.length === 0) {
+    return (
+      <div className="mt-4 tracking-wider text-gray-500">No items found</div>
+    );
   }
 
   return (
