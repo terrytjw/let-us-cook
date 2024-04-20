@@ -19,7 +19,7 @@ git clone https://github.com/terrytjw/next-gen-template.git
 Install dependencies:
 
 ```bash
-yarn
+bun i
 ```
 
 ### Step 3
@@ -37,7 +37,7 @@ Set up your own Supabase postgresDB at https://supabase.com/dashboard/projects
 Run the following command to push the schema to the database:
 
 ```zsh
-yarn update-db
+bun update-db
 ```
 
 Schema file can be found in `/lib/db/schema.ts` directory.
@@ -47,7 +47,7 @@ Schema file can be found in `/lib/db/schema.ts` directory.
 Run the development server:
 
 ```zsh
-yarn dev
+bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
