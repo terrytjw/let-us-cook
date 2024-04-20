@@ -41,6 +41,7 @@ import {
   Import,
   GitMerge,
   ChevronsDown,
+  Send,
 } from "lucide-react";
 
 export const Icons = {
@@ -78,7 +79,6 @@ export const Icons = {
   info: Info,
   chevronsUpDown: ChevronsUpDown,
   chevronsDown: ChevronsDown,
-  send: Forward,
   copy: ClipboardIcon,
   thumbsUp: ThumbsUp,
   gitHub: ({ ...props }: LucideProps) => (
@@ -103,4 +103,5 @@ export const Icons = {
   import: Import,
   version: GitMerge,
   loading: Loader2,
+  send: Send,
 };
