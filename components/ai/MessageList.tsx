@@ -9,7 +9,6 @@ type MessageListProps = {
   isLoading: boolean;
 };
 const MessageList = ({ messages, isLoading }: MessageListProps) => {
-  console.log("messages -> ", messages);
   if (messages.length === 0)
     return (
       <p className="p-4 tracking-wider text-gray-500">What's on your mind?</p>

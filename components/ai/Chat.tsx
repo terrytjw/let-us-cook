@@ -21,8 +21,6 @@ export default function Chat() {
 
   useAutoScroll("message-container", [messages]);
 
-  console.log("messages ->", messages);
-
   return (
     <ScrollArea className="relative rounded p-4" id="message-container">
       <MessageList messages={messages} isLoading={isLoading} />

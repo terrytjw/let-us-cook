@@ -1,24 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Message as VercelChatMessage, StreamingTextResponse } from "ai";
+import { StreamingTextResponse } from "ai";
+import { AI_MODELS } from "@/lib/constants";
+import { formatMessage } from "@/lib/utils";
 
+// Chat Models
+import { ChatAnthropic } from "@langchain/anthropic";
+import { ChatGroq } from "@langchain/groq";
+import { ChatOllama } from "@langchain/community/chat_models/ollama";
 import { ChatOpenAI } from "@langchain/openai";
-import { PromptTemplate } from "@langchain/core/prompts";
+import { ChatTogetherAI } from "@langchain/community/chat_models/togetherai";
+
+// LangChain
+import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { RunnableSequence } from "@langchain/core/runnables";
 import { HttpResponseOutputParser } from "langchain/output_parsers";
 
 export const runtime = "edge";
 
-const formatMessage = (message: VercelChatMessage) => {
-  return `${message.role}: ${message.content}`;
-};
-
-const TEMPLATE = `You are a helpful AI assistant. All responses must be informative and provide actionable steps.
+const SYS_TEMPLATE = `You are a helpful AI assistant. All responses must be concise and provide actionable steps.
 
 Current conversation:
 {chat_history}
-
-User: {input}
-AI:`;
+`;
 
 /**
  * This handler initializes and calls a simple chain with a prompt,
@@ -32,36 +35,49 @@ export async function POST(req: NextRequest) {
     const messages = body.messages ?? [];
     const formattedPreviousMessages = messages.slice(0, -1).map(formatMessage);
     const currentMessageContent = messages[messages.length - 1].content;
-    const prompt = PromptTemplate.fromTemplate(TEMPLATE);
+
+    const prompt = ChatPromptTemplate.fromMessages([
+      ["system", SYS_TEMPLATE],
+      ["human", "{input}"],
+    ]);
 
     /**
-     * You can also try e.g.:
-     *
-     * import { ChatAnthropic } from "langchain/chat_models/anthropic";
-     * const model = new ChatAnthropic({});
-     *
      * See a full list of supported models at:
      * https://js.langchain.com/docs/modules/model_io/models/
      */
-    const model = new ChatOpenAI({
-      temperature: 0.8,
-      modelName: "gpt-3.5-turbo-1106",
-      streaming: true,
+
+    // Anthropic
+    // const model = new ChatAnthropic({
+    //   model: AI_MODELS.ANTHROPIC.HAIKU,
+    //   temperature: 0.8,
+    // });
+
+    // Groq
+    // const model = new ChatGroq({
+    //   model: AI_MODELS.GROQ.MIXTRAL_8X7B,
+    //   temperature: 0.8,
+    // });
+
+    // Ollama (local)
+    const model = new ChatOllama({
+      baseUrl: "http://localhost:11434", // default port for Ollama running on your local machine
+      model: "llama3:latest", // string has to match the model you are running on your local Ollama
     });
 
-    /**
-     * Chat models stream message chunks rather than bytes, so this
-     * output parser handles serialization and byte-encoding.
-     */
+    // OpenAI
+    // const model = new ChatOpenAI({
+    //   model: AI_MODELS.OPENAI.GPT_3,
+    //   temperature: 0.8,
+    // });
+
+    // TogetherAI (currently buggy, do not use)
+    // const model = new ChatTogetherAI({
+    // model: "mistralai/Mixtral-8x22B-Instruct-v0.1",
+    //   temperature: 0.8,
+    // });
+
     const outputParser = new HttpResponseOutputParser();
 
-    /**
-     * Can also initialize as:
-     *
-     * import { RunnableSequence } from "@langchain/core/runnables";
-     * const chain = RunnableSequence.from([prompt, model, outputParser]);
-     */
-    // const chain = prompt.pipe(model).pipe(outputParser);
     const chain = RunnableSequence.from([prompt, model, outputParser]);
 
     const stream = await chain.stream({
