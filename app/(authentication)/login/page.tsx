@@ -4,6 +4,7 @@ import { buttonVariants } from "@/components/ui/button";
 
 import { Icons } from "@/components/Icons";
 import LoginButton from "@/components/LoginButton";
+import LoginWithEmailButton from "@/components/LoginWithEmailButton";
 
 const LoginPage = () => {
   return (
@@ -31,6 +32,7 @@ const LoginPage = () => {
           </h1>
         </div>
         <LoginButton />
+        <LoginWithEmailButton />
         <p className="text-center text-sm text-muted-foreground">
           Sign in to continue to your account.
         </p>
