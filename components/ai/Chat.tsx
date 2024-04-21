@@ -1,11 +1,10 @@
 "use client";
 
 import { useChat } from "ai/react";
-import useAutoScroll from "@/hooks/useAutoScroll";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ScrollArea } from "@/components/ui/scroll-area";
+
 import { Icons } from "@/components/Icons";
 import MessageList from "@/components/ai/MessageList";
 
@@ -19,13 +18,13 @@ export default function Chat() {
       // initialMessages: data || [],
     });
 
-  useAutoScroll("message-container", [messages]);
-
   return (
-    <ScrollArea className="relative rounded p-4" id="message-container">
+    <main className="relative h-[40rem]">
       <MessageList messages={messages} isLoading={isLoading} />
-
-      <form onSubmit={handleSubmit} className="sticky bottom-0 px-2 py-4">
+      <form
+        onSubmit={handleSubmit}
+        className="absolute bottom-0 left-0 right-0 w-full px-2 py-4"
+      >
         <div className="relative">
           <Input
             value={input}
@@ -42,6 +41,6 @@ export default function Chat() {
           </Button>
         </div>
       </form>
-    </ScrollArea>
+    </main>
   );
 }

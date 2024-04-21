@@ -1,5 +1,6 @@
 import React from "react";
 
+import BackButton from "@/components/navigation/BackButton";
 import Chat from "@/components/ai/Chat";
 
 const ChatPage = () => {
@@ -16,6 +17,9 @@ const ChatPage = () => {
         </p>
         <Chat />
       </section>
+      <div>
+        <BackButton to="/ai" label="AI Dashboard" />
+      </div>
     </main>
   );
 };
