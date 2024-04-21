@@ -29,7 +29,7 @@ Current conversation:
  *
  * https://js.langchain.com/docs/guides/expression_language/cookbook#prompttemplate--llm--outputparser
  */
-export async function POST(req: NextRequest) {
+export const POST = async (req: NextRequest) => {
   try {
     const body = await req.json();
     const messages = body.messages ?? [];
@@ -86,7 +86,10 @@ export async function POST(req: NextRequest) {
     });
 
     return new StreamingTextResponse(stream);
-  } catch (e: any) {
-    return NextResponse.json({ error: e.message }, { status: e.status ?? 500 });
+  } catch (error: any) {
+    return NextResponse.json(
+      { error: error.message },
+      { status: error.status ?? 500 },
+    );
   }
-}
+};
