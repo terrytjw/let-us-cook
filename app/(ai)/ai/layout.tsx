@@ -7,10 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import LogoutButton from "@/components/LogoutButton";
 
-type DashboardLayoutProps = {
+type AILayoutProps = {
   children?: React.ReactNode;
 };
-const DashboardLayout = async ({ children }: DashboardLayoutProps) => {
+const AILayout = async ({ children }: AILayoutProps) => {
   const { user, error } = await getCurrentUser();
 
   if (error || !user) {
@@ -66,4 +66,4 @@ const DashboardLayout = async ({ children }: DashboardLayoutProps) => {
   );
 };
 
-export default DashboardLayout;
+export default AILayout;

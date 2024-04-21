@@ -2,8 +2,8 @@ import * as React from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
-import ThemeModeToggle from "./ThemeModeToggle";
-import { Icons } from "../Icons";
+import ThemeModeToggle from "@/components/navigation/ThemeModeToggle";
+import { Icons } from "@/components/Icons";
 
 type FooterProps = React.HTMLAttributes<HTMLDivElement>;
 const Footer = ({ className }: FooterProps) => {
