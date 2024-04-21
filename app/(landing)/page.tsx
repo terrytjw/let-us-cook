@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { getCurrentUser } from "@/lib/user";
+import { currentUser } from "@clerk/nextjs/server";
 
 import { Button } from "@/components/ui/button";
 
 const Home = async () => {
-  const user = await getCurrentUser();
+  const user = await currentUser();
 
   return (
     <main className="flex flex-col items-center justify-center gap-y-24 p-24">
@@ -15,9 +15,12 @@ const Home = async () => {
         <p className="text-center font-medium text-gray-300">
           Absolute kickass Next.js template 🔥
         </p>
-        <div className="mt-6 flex justify-center">
-          <Button asChild>
-            <Link href={user ? "/private" : "/login"}>Get Started</Link>
+        <div className="mt-6 flex gap-x-2">
+          <Button className="w-full" asChild>
+            <Link href={user ? "/private" : "/sign-in"}>Sign In</Link>
+          </Button>
+          <Button className="w-full" variant="outline" asChild>
+            <Link href={user ? "/private" : "/sign-up"}>Sign Up</Link>
           </Button>
         </div>
       </div>

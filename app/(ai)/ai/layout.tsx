@@ -1,46 +1,33 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { getCurrentUser } from "@/lib/user";
+import { currentUser } from "@clerk/nextjs/server";
 
+import { ClerkLoaded, ClerkLoading, UserButton } from "@clerk/nextjs";
 import Footer from "@/components/navigation/Footer";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import LogoutButton from "@/components/LogoutButton";
 
 type AILayoutProps = {
   children?: React.ReactNode;
 };
 const AILayout = async ({ children }: AILayoutProps) => {
-  const { user, error } = await getCurrentUser();
+  const user = await currentUser();
 
-  if (error || !user) {
-    redirect("/login");
+  if (!user) {
+    redirect("/sign-in");
   }
 
-  const {
-    user_metadata: { full_name },
-  } = user;
+  const { firstName } = user;
 
   return (
     <div className="flex min-h-screen flex-col">
-      {/* <header className="sticky top-0 z-40 border-b bg-background">
-        <div className="container flex h-16 items-center justify-between py-4">
-          <MainNav items={dashboardConfig.mainNav} />
-          <UserAccountNav
-            user={{
-              name: user.name || "",
-              email: user.email || "",
-              image: user.image || "",
-            }}
-          />
-        </div>
-      </header> */}
       <header className="flex items-center justify-between p-6">
         <div>
           <h1 className="text-xl">
             Welcome,{" "}
             <span className="font-semibold italic text-primary">
-              {full_name}
+              {firstName}
             </span>
           </h1>
         </div>
@@ -54,7 +41,17 @@ const AILayout = async ({ children }: AILayoutProps) => {
           <Button asChild>
             <Link href="/ai">AI</Link>
           </Button>
-          <LogoutButton />
+          <ClerkLoading>
+            <Avatar>
+              {/* <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" /> */}
+              <AvatarFallback className="border bg-background">
+                ..
+              </AvatarFallback>
+            </Avatar>
+          </ClerkLoading>
+          <ClerkLoaded>
+            <UserButton afterSignOutUrl="/sign-in" />
+          </ClerkLoaded>
         </div>
       </header>
 

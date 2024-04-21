@@ -1,7 +1,6 @@
 import React from "react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { getCurrentUser } from "@/lib/user";
 
 import {
   Card,
@@ -38,11 +37,11 @@ const aiPages = [
 ];
 
 const AIPage = async () => {
-  const { user, error } = await getCurrentUser();
+  // const { user, error } = await getCurrentUser();
 
-  if (error || !user) {
-    redirect("/login");
-  }
+  // if (error || !user) {
+  //   redirect("/login");
+  // }
 
   return (
     <main className="flex flex-col justify-center p-6">

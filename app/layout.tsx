@@ -1,3 +1,4 @@
+import { ClerkProvider, SignedOut, RedirectToSignIn } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { cn } from "@/lib/utils";
@@ -22,20 +23,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html
-      lang="en"
-      className={IS_DEV_MODE ? "debug-screens" : ""}
-      suppressHydrationWarning
-    >
-      <head />
-      <body className={cn(inter.className)}>
-        <Providers>
-          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-            {children}
-            <Toaster />
-          </ThemeProvider>
-        </Providers>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html
+        lang="en"
+        className={IS_DEV_MODE ? "debug-screens" : ""}
+        suppressHydrationWarning
+      >
+        <head />
+        <body className={cn(inter.className)}>
+          <Providers>
+            <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+              {children}
+              <Toaster />
+            </ThemeProvider>
+          </Providers>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

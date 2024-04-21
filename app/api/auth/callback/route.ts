@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 
 import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
@@ -7,21 +7,23 @@ import { eq } from "drizzle-orm";
 
 export const GET = async (request: Request) => {
   const { searchParams, origin } = new URL(request.url);
-  const code = searchParams.get("code");
-  const next = searchParams.get("next") ?? "/private";
 
-  if (code) {
-    const supabase = await createClient();
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
+  try {
+    // Get the Backend API User object when you need access to the user's information
+    const user = await currentUser();
 
-    // check for user entry in db
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    if (!user) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    const { id, emailAddresses, firstName, lastName } = user;
+
+    console.log("id -> ", id);
+
     const userFromDB = await db
       .select()
       .from(users)
-      .where(eq(users.email, user?.email || ""));
+      .where(eq(users.email, emailAddresses[0].emailAddress || ""));
 
     console.log("User from DB -> ", userFromDB[0]);
 
@@ -29,26 +31,19 @@ export const GET = async (request: Request) => {
       console.log("User exists in db");
     } else {
       console.log("User does not exist in db. Adding new user to db...");
-      const { data } = await supabase.auth.getUserIdentities();
-
-      const userId = user!.id;
-      const userFullName = data?.identities[0].identity_data?.full_name;
-      const userEmail = data?.identities[0].identity_data?.email;
 
       await db.insert(users).values({
-        id: userId,
-        fullName: userFullName,
-        email: userEmail,
+        id,
+        fullName: `${firstName} ${lastName}`,
+        email: emailAddresses[0].emailAddress,
       });
 
       console.log("User added to db");
     }
 
-    if (!error) {
-      return NextResponse.redirect(`${origin}${next}`);
-    }
+    return NextResponse.redirect(`${origin}/private`);
+  } catch (error) {
+    // return the user to an error page with instructions
+    return NextResponse.redirect(`${origin}/auth/auth-code-error`);
   }
-
-  // return the user to an error page with instructions
-  return NextResponse.redirect(`${origin}/auth/auth-code-error`);
 };

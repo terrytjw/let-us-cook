@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { currentUser } from "@clerk/nextjs/server";
 
 import { z } from "zod";
 import { ItemPostSchema } from "@/validations/items";
@@ -9,20 +9,21 @@ import { items } from "@/lib/db/schema";
 
 export const GET = async (req: Request) => {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    // ensure user is authenticated
+    const user = await currentUser();
+
+    console.log("user -> ", user);
 
     if (!user) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    const userId = user.id;
-    const _items = await db
-      .select()
-      .from(items)
-      .where(eq(items.userId, userId));
+    const { id } = user;
+
+    // const userId = user.id;
+    const _items = await db.select().from(items).where(eq(items.userId, id));
+
+    console.log("items -> ", _items);
 
     return NextResponse.json({ items: _items }, { status: 200 });
   } catch (error) {
@@ -39,10 +40,8 @@ export const GET = async (req: Request) => {
 
 export const POST = async (req: Request) => {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    // ensure user is authenticated
+    const user = await currentUser();
 
     if (!user) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
@@ -57,6 +56,8 @@ export const POST = async (req: Request) => {
       price,
       description,
     };
+
+    console.log("item -> ", item);
 
     const [data] = await db
       .insert(items)

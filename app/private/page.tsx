@@ -1,15 +1,15 @@
 import { redirect } from "next/navigation";
-import { getCurrentUser } from "@/lib/user";
+import { currentUser } from "@clerk/nextjs/server";
 
 import ItemsList from "@/components/items/ItemsList";
 import ItemsAction from "@/components/items/ItemsAction";
 
 // only able to see page when logged in
 const PrivatePage = async () => {
-  const { user, error } = await getCurrentUser();
+  const user = await currentUser();
 
-  if (error || !user) {
-    redirect("/login");
+  if (!user) {
+    redirect("/sign-in");
   }
 
   const { id } = user;

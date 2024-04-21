@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { currentUser } from "@clerk/nextjs/server";
 
 import { z } from "zod";
 import { items } from "@/lib/db/schema";
@@ -23,23 +23,19 @@ export const DELETE = async (
     const { params } = RouteContextSchema.parse(context);
 
     // ensure user is authenticated
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const user = await currentUser();
 
     if (!user) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
+    const { id } = user;
+
     // delete the item
     const deleteResult = await db
       .delete(items)
       .where(
-        and(
-          eq(items.id, parseInt(params.itemId, 10)),
-          eq(items.userId, user.id),
-        ),
+        and(eq(items.id, parseInt(params.itemId, 10)), eq(items.userId, id)),
       );
 
     if (deleteResult.count === 0) {
