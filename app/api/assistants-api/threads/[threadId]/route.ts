@@ -13,7 +13,7 @@ const RouteContextSchema = z.object({
   }),
 });
 
-const openai = new OpenAI();
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || "" });
 
 export const DELETE = async (
   req: Request,

@@ -6,7 +6,7 @@ import { AssistantPostSchema } from "@/validations/assistant";
 
 export const dynamic = "force-dynamic"; // recommended by the Vercel team, see https://github.com/vercel/ai/blob/main/examples/next-openai/app/api/assistant/route.ts
 
-const openai = new OpenAI();
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || "" });
 
 const homeTemperatures = {
   bedroom: 20,

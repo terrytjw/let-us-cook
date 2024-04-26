@@ -9,7 +9,7 @@ import { db } from "@/lib/db";
 import { eq } from "drizzle-orm";
 import { threads } from "@/lib/db/schema";
 
-const openai = new OpenAI();
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || "" });
 
 export const GET = async (req: Request) => {
   try {

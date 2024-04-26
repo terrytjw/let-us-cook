@@ -8,7 +8,7 @@ import { z } from "zod";
 
 export const runtime = "edge";
 
-const openai = new OpenAI();
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY || "" });
 
 const RouteContextSchema = z.object({
   params: z.object({
