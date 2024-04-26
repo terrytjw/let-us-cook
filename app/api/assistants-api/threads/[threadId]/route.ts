@@ -1,16 +1,19 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/user";
+import OpenAI from "openai";
 
 import { z } from "zod";
-import { items } from "@/lib/db/schema";
+import { threads } from "@/lib/db/schema";
 import { db } from "@/lib/db";
 import { and, eq } from "drizzle-orm";
 
 const RouteContextSchema = z.object({
   params: z.object({
-    itemId: z.string(),
+    threadId: z.string(),
   }),
 });
+
+const openai = new OpenAI();
 
 export const DELETE = async (
   req: Request,
@@ -24,19 +27,20 @@ export const DELETE = async (
     }
 
     const {
-      params: { itemId },
+      params: { threadId },
     } = RouteContextSchema.parse(context);
 
-    // delete the item
+    // delete the thread from openai
+    await openai.beta.threads.del(threadId);
+
+    // delete the thread from DB
     const deleteResult = await db
-      .delete(items)
-      .where(
-        and(eq(items.id, parseInt(itemId, 10)), eq(items.userId, user.id)),
-      );
+      .delete(threads)
+      .where(and(eq(threads.id, threadId), eq(threads.userId, user.id)));
 
     if (deleteResult.count === 0) {
       return NextResponse.json(
-        { error: "Item not found or not owned by user" },
+        { error: "Thread not found or not owned by user" },
         { status: 404 },
       );
     }

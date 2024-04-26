@@ -3,10 +3,9 @@
 import { useChat } from "ai/react";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-
 import { Icons } from "@/components/Icons";
-import MessageList from "@/components/ai/MessageList";
+import { Input } from "@/components/ui/input";
+import MessageList from "@/components/ai/chat/MessageList";
 
 export default function Chat() {
   const { messages, input, handleInputChange, handleSubmit, isLoading } =
