@@ -3,8 +3,8 @@
 import React from "react";
 import { useAddItemMutation } from "@/hooks/items/useAddItem";
 
-import { Button } from "../ui/button";
-import { Icons } from "../Icons";
+import { Button } from "@/components/ui/button";
+import { Icons } from "@/components/Icons";
 
 type ItemsActionProps = {
   userId: string;

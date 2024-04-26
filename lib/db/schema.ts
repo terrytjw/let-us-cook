@@ -16,3 +16,13 @@ export const items = pgTable("items", {
   price: text("price").notNull(),
   description: text("description").notNull(),
 });
+
+export const threads = pgTable("threads", {
+  id: text("id").primaryKey(),
+  userId: text("userId")
+    .references(() => users.id, { onDelete: "cascade" })
+    .notNull(),
+  firstMessage: text("firstMessage").notNull(),
+  title: text("title").notNull(),
+  createdAt: timestamp("createdAt", { mode: "date" }).notNull().defaultNow(),
+});

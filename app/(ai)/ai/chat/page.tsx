@@ -1,7 +1,7 @@
 import React from "react";
 
 import BackButton from "@/components/navigation/BackButton";
-import Chat from "@/components/ai/Chat";
+import Chat from "@/components/ai/chat/Chat";
 
 const ChatPage = () => {
   return (

@@ -21,7 +21,8 @@ const aiPages = [
     id: "rag",
     name: "Retrieval Augmented Generation",
     description: "Enhance text with retrieval",
-    href: "/ai/rag",
+    // href: "/ai/rag",
+    href: "/ai/#", // turn on when ready
   },
   {
     id: "ai-agent",
@@ -33,7 +34,8 @@ const aiPages = [
     id: "gen-ui",
     name: "Generative UI",
     description: "UI streaming in action",
-    href: "/ai/gen-ui",
+    // href: "/ai/gen-ui",
+    href: "/ai/#", // turn on when ready
   },
 ];
 

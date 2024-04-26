@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { getCurrentUser } from "@/lib/user";
 
 import { z } from "zod";
 import { ItemPostSchema } from "@/validations/items";
@@ -9,10 +9,7 @@ import { items } from "@/lib/db/schema";
 
 export const GET = async (req: Request) => {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { user } = await getCurrentUser();
 
     if (!user) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
@@ -39,10 +36,7 @@ export const GET = async (req: Request) => {
 
 export const POST = async (req: Request) => {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { user } = await getCurrentUser();
 
     if (!user) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
