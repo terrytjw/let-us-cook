@@ -8,7 +8,7 @@ import { eq } from "drizzle-orm";
 export const GET = async (request: Request) => {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
-  const next = searchParams.get("next") ?? "/private";
+  const next = searchParams.get("next") ?? "/ai";
 
   if (code) {
     const supabase = await createClient();

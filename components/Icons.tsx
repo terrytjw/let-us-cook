@@ -42,6 +42,7 @@ import {
   GitMerge,
   ChevronsDown,
   Send,
+  ChefHat,
 } from "lucide-react";
 
 export const Icons = {
@@ -106,6 +107,7 @@ export const Icons = {
   openai: IconOpenAI,
   user: IconUser,
   download: IconDownload,
+  cook: ChefHat,
 };
 
 // TODO: all these below to be replaced with icons from Lucide

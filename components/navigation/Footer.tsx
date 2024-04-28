@@ -12,7 +12,7 @@ const Footer = ({ className }: FooterProps) => {
       <div className="container flex flex-col items-center justify-between gap-4 py-10 md:h-24 md:flex-row md:py-0">
         <div className="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
           <Link href="/" className="flex items-center space-x-2">
-            <Icons.chevronsDown />
+            <Icons.cook />
           </Link>
           <p className="hidden pr-2 text-gray-500 md:block"> | </p>
           <p className="text-center text-sm leading-loose text-gray-500 md:text-left">
@@ -25,16 +25,17 @@ const Footer = ({ className }: FooterProps) => {
             >
               Terry Tan
             </Link>
-            . Get the source code on{" "}
+            .
+            {/*Get the source code on{" "}
             <Link
-              href="https://github.com/terrytjw/next-gen-template"
+              href=""
               target="_blank"
               rel="noreferrer"
               className="font-medium underline underline-offset-4 transition-all duration-700 hover:text-primary"
             >
               GitHub
             </Link>
-            .
+            . */}
           </p>
         </div>
         <ThemeModeToggle />

@@ -1,6 +1,6 @@
-# Next Gen Template
+# Let Us Cook
 
-Next Gen template for building fullstack apps with Next.js, Tailwind CSS, DrizzleORM & Supabase.
+The kickass template for building full stack AI apps with Next.js.
 
 ![next-gen-image](public/next-gen.png)
 

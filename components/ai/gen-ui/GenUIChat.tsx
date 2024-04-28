@@ -32,11 +32,11 @@ const GenUIChat = () => {
   }, [aiState]);
 
   return (
-    <main>
+    <main className="rounded-lg border border-secondary p-4">
       {messages.length === 0 && (
-        <div className="px-2 py-4 tracking-wider text-gray-500">
+        <p className="text-center tracking-wider text-gray-500">
           Ask about your flight info...
-        </div>
+        </p>
       )}
 
       <div className="py-4">

@@ -1,5 +1,6 @@
 import React from "react";
 
+import BackButton from "@/components/navigation/BackButton";
 import AssistantAction from "@/components/ai/assistant/AssistantAction";
 import ThreadList from "@/components/ai/assistant/AsstThreadList";
 
@@ -19,6 +20,9 @@ const AgentPage = () => {
         </p>
         <ThreadList />
       </section>
+      <div>
+        <BackButton to="/ai" label="AI Dashboard" />
+      </div>
     </main>
   );
 };
