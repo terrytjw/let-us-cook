@@ -18,7 +18,7 @@ export default function Chat() {
     });
 
   return (
-    <main className="relative h-[40rem]">
+    <main className="relative h-[40rem] rounded-lg border border-secondary p-4">
       <MessageList messages={messages} isLoading={isLoading} />
       <form
         onSubmit={handleSubmit}

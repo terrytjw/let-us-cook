@@ -12,7 +12,11 @@ type MessageListProps = {
 const MessageList = ({ messages, isLoading }: MessageListProps) => {
   if (messages.length === 0)
     return (
-      <p className="p-4 tracking-wider text-gray-500">What's on your mind?</p>
+      <div className="flex h-full items-center justify-center">
+        <p className="py-4 tracking-wider text-gray-500">
+          What's on your mind?
+        </p>
+      </div>
     );
 
   return (

@@ -15,6 +15,20 @@ const ChatPage = () => {
             /api/chat/route.ts
           </span>
         </p>
+        <p className="mb-4 mt-3">
+          Note that the Chat page does not work if{" "}
+          <span className="rounded border border-gray-400 p-1 font-mono text-gray-400">
+            ai
+          </span>{" "}
+          is on a version after{" "}
+          <span className="rounded border border-primary p-1 font-mono text-primary">
+            3.0.18
+          </span>
+          . letuscook.io is currently using{" "}
+          <span className="rounded border border-primary p-1 font-mono text-primary">
+            3.0.34
+          </span>
+        </p>
         <Chat />
       </section>
       <div>

@@ -22,11 +22,11 @@ const LoginPage = () => {
       </Link>
       <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
         <div className="flex flex-col items-center space-y-1">
-          <Icons.chevronsDown className="h-8 w-8 animate-bounce" />
+          <Icons.cook className="h-8 w-8 animate-bounce" />
           <h1 className="text-md font-semibold tracking-tight">
             Welcome to{" "}
             <span className="font-bold">
-              Next<span className="text-primary">Gen</span>.
+              Let Us <span className="text-primary">Cook</span>.
             </span>
           </h1>
         </div>

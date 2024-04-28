@@ -34,8 +34,7 @@ const aiPages = [
     id: "gen-ui",
     name: "Generative UI",
     description: "UI streaming in action",
-    // href: "/ai/gen-ui",
-    href: "/ai/#", // turn on when ready
+    href: "/ai/gen-ui",
   },
 ];
 
@@ -48,7 +47,7 @@ const AIPage = async () => {
 
   return (
     <main className="flex flex-col justify-center p-6">
-      <h1 className="text-4xl font-bold">NextGen AI</h1>
+      <h1 className="text-4xl font-bold">Let's cook up some AI</h1>
       <section className="py-4">
         <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2">
           {aiPages.map((page) => (
