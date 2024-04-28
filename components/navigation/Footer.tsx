@@ -30,7 +30,7 @@ const Footer = ({ className }: FooterProps) => {
               href="https://github.com/terrytjw/next-gen-template"
               target="_blank"
               rel="noreferrer"
-              className="font-medium underline underline-offset-4 transition-all duration-700 hover:text-orange-500"
+              className="font-medium underline underline-offset-4 transition-all duration-700 hover:text-primary"
             >
               GitHub
             </Link>
