@@ -4,8 +4,8 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-import Item from "./Item";
-import { Icons } from "../Icons";
+import Item from "@/components/items/Item";
+import { Icons } from "@/components/Icons";
 
 const ItemsList = () => {
   const fetchItems = async () => {

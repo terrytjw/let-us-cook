@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/user";
+import { AI } from "@/lib/gen-ui/actions";
 
 import Footer from "@/components/navigation/Footer";
 import { Button } from "@/components/ui/button";
@@ -60,7 +61,10 @@ const AILayout = async ({ children }: AILayoutProps) => {
 
       <Separator />
 
-      <main className="flex-1">{children}</main>
+      <AI>
+        <main className="flex-1">{children}</main>
+      </AI>
+
       <Footer />
     </div>
   );

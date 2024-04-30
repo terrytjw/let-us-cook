@@ -21,7 +21,8 @@ const aiPages = [
     id: "rag",
     name: "Retrieval Augmented Generation",
     description: "Enhance text with retrieval",
-    href: "/ai/rag",
+    // href: "/ai/rag",
+    href: "/ai/#", // turn on when ready
   },
   {
     id: "ai-agent",
@@ -46,7 +47,7 @@ const AIPage = async () => {
 
   return (
     <main className="flex flex-col justify-center p-6">
-      <h1 className="text-4xl font-bold">NextGen AI</h1>
+      <h1 className="text-4xl font-bold">Let's cook up some AI</h1>
       <section className="py-4">
         <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2">
           {aiPages.map((page) => (

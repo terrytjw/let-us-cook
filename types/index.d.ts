@@ -8,3 +8,14 @@ type Item = {
   price: number;
   description: string;
 };
+
+type AsstThread = {
+  id: string;
+  userId: string;
+  title: string;
+  createdAt: string;
+};
+
+type AxiosErrorResponse = {
+  error: string;
+};

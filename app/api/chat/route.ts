@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getCurrentUser } from "@/lib/user";
 import { StreamingTextResponse } from "ai";
 import { AI_MODELS } from "@/lib/constants";
 import { formatMessage } from "@/lib/utils";
@@ -31,6 +32,12 @@ Current conversation:
  */
 export const POST = async (req: NextRequest) => {
   try {
+    const { user } = await getCurrentUser();
+
+    if (!user) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
     const body = await req.json();
     const messages = body.messages ?? [];
     const formattedPreviousMessages = messages.slice(0, -1).map(formatMessage);
@@ -59,16 +66,16 @@ export const POST = async (req: NextRequest) => {
     // });
 
     // Ollama (local)
-    const model = new ChatOllama({
-      baseUrl: "http://localhost:11434", // default port for Ollama running on your local machine
-      model: "llama3:latest", // string has to match the model you are running on your local Ollama
-    });
+    // const model = new ChatOllama({
+    //   baseUrl: "http://localhost:11434", // default port for Ollama running on your local machine
+    //   model: "llama3:latest", // string has to match the model you are running on your local Ollama
+    // });
 
     // OpenAI
-    // const model = new ChatOpenAI({
-    //   model: AI_MODELS.OPENAI.GPT_3,
-    //   temperature: 0.8,
-    // });
+    const model = new ChatOpenAI({
+      model: AI_MODELS.OPENAI.GPT_3,
+      temperature: 0.8,
+    });
 
     // TogetherAI (currently buggy, do not use)
     // const model = new ChatTogetherAI({
