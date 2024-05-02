@@ -8,6 +8,7 @@ export const AI_MODELS = {
   // https://console.groq.com/docs/models
   GROQ: {
     LLAMA3_8B: "llama3-8b-8192",
+    LLAMA3_70B: "llama3-70b-8192",
     MIXTRAL_8X7B: "mixtral-8x7b-32768",
   },
   // https://platform.openai.com/docs/models/models

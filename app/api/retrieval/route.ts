@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Message as VercelChatMessage, StreamingTextResponse } from "ai";
-import { createClient } from "@supabase/supabase-js";
 import { AI_MODELS } from "@/lib/constants";
+import { createClient } from "@/lib/supabase/server";
 
 // LangChain
+import { ChatGroq } from "@langchain/groq";
 import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
 import { PromptTemplate } from "@langchain/core/prompts";
 import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
@@ -13,10 +14,10 @@ import {
   BytesOutputParser,
   StringOutputParser,
 } from "@langchain/core/output_parsers";
+import { HttpResponseOutputParser } from "langchain/output_parsers";
 
 export const runtime = "edge";
 
-// function to combine the documents fetched from the vector store into a single string
 const combineDocumentsFn = (docs: Document[]) => {
   const serializedDocs = docs.map((doc) => doc.pageContent);
   return serializedDocs.join("\n\n");
@@ -47,8 +48,7 @@ const condenseQuestionPrompt = PromptTemplate.fromTemplate(
   CONDENSE_QUESTION_TEMPLATE,
 );
 
-const ANSWER_TEMPLATE = `
-Answer the question based only on the following context and chat history:
+const ANSWER_TEMPLATE = `Answer the question based only on the following context and chat history:
 <context>
   {context}
 </context>
@@ -74,19 +74,20 @@ export async function POST(req: NextRequest) {
     const previousMessages = messages.slice(0, -1);
     const currentMessageContent = messages[messages.length - 1].content;
 
-    const model = new ChatOpenAI({
-      model: AI_MODELS.OPENAI.GPT_4,
+    // const model = new ChatOpenAI({
+    //   model: AI_MODELS.OPENAI.GPT_4,
+    //   temperature: 0.2,
+    // });
+
+    // Groq
+    const model = new ChatGroq({
+      model: AI_MODELS.GROQ.LLAMA3_70B,
       temperature: 0.2,
     });
 
-    const client = createClient(
-      process.env.SUPABASE_URL!,
-      process.env.SUPABASE_PRIVATE_KEY!,
-    );
-
-    // initialize vector store with OpenAI embeddings for document matching
+    const supabase = await createClient();
     const vectorstore = new SupabaseVectorStore(new OpenAIEmbeddings(), {
-      client,
+      client: supabase,
       tableName: "documents",
       queryName: "match_documents",
     });
@@ -100,23 +101,17 @@ export async function POST(req: NextRequest) {
      * You can also use the "createRetrievalChain" method with a
      * "historyAwareRetriever" to get something prebaked.
      */
-
-    // create standalone question which summarizes the chat history as context and rephrases the incoming follow up question from the user
-    // reduces tokens which translates into lower cost and latency of the LLM API call
     const standaloneQuestionChain = RunnableSequence.from([
       condenseQuestionPrompt,
       model,
       new StringOutputParser(),
     ]);
 
-    // defining a callback to resolve the promise with the documents fetched from the vector store
-    // used in the retriever initialization
     let resolveWithDocuments: (value: Document[]) => void;
     const documentPromise = new Promise<Document[]>((resolve) => {
       resolveWithDocuments = resolve;
     });
 
-    // create a retriever from the vector store that can be used to fetch documents based on vector similarity or other criteria
     const retriever = vectorstore.asRetriever({
       callbacks: [
         {
@@ -149,7 +144,13 @@ export async function POST(req: NextRequest) {
       },
       answerChain,
       new BytesOutputParser(),
+      // new StringOutputParser(),
     ]);
+
+    // const res = await conversationalRetrievalQAChain.invoke({
+    //   question: currentMessageContent,
+    //   chat_history: formatVercelMessages(previousMessages),
+    // });
 
     const stream = await conversationalRetrievalQAChain.stream({
       question: currentMessageContent,
@@ -160,6 +161,7 @@ export async function POST(req: NextRequest) {
     const serializedSources = Buffer.from(
       JSON.stringify(
         documents.map((doc) => {
+          console.log("doc item -> ", doc);
           return {
             pageContent: doc.pageContent.slice(0, 50) + "...",
             metadata: doc.metadata,
@@ -174,7 +176,11 @@ export async function POST(req: NextRequest) {
         "x-sources": serializedSources,
       },
     });
+
+    // console.log("res -> ", res);
+    // return NextResponse.json({ res }, { status: 200 });
   } catch (e: any) {
+    console.log("error -> ", e);
     return NextResponse.json({ error: e.message }, { status: e.status ?? 500 });
   }
 }

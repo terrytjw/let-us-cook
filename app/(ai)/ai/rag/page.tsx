@@ -1,6 +1,6 @@
 import RagChat from "@/components/ai/rag/RagChat";
 
-export default function RAGPage() {
+export default function AgentsPage() {
   const InfoCard = (
     <div className="max-h-[85%] w-full overflow-hidden rounded bg-[#25252d] p-4 md:p-8">
       <h1 className="mb-4 text-3xl md:text-4xl">
