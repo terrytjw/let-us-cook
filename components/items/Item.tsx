@@ -5,6 +5,7 @@ import { useDeleteItemMutation } from "@/hooks/items/useDeleteItem";
 
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/Icons";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type ItemProps = {
   item: Item;
@@ -40,3 +41,15 @@ const Item = ({ item }: ItemProps) => {
 };
 
 export default Item;
+
+Item.Skeleton = function ItemSkeleton() {
+  return (
+    <div className="flex flex-col gap-y-2 rounded-md border border-gray-200 p-4 shadow-sm">
+      <Skeleton className="h-5 w-1/2 text-gray-500" />
+      <Skeleton className="h-5 w-1/2 text-gray-500" />
+      <div className="mt-4 flex justify-end">
+        <Skeleton className="h-8 w-24" />
+      </div>
+    </div>
+  );
+};

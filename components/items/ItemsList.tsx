@@ -5,7 +5,6 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 import Item from "@/components/items/Item";
-import { Icons } from "@/components/Icons";
 
 const ItemsList = () => {
   const fetchItems = async () => {
@@ -20,8 +19,10 @@ const ItemsList = () => {
 
   if (isItemsLoading) {
     return (
-      <div className="mt-4 flex items-center gap-2">
-        <Icons.loading className="h-4 w-4 animate-spin" /> Items Loading...
+      <div className="grid grid-cols-1 gap-4 py-4 md:grid-cols-2 lg:grid-cols-3">
+        <Item.Skeleton />
+        <Item.Skeleton />
+        <Item.Skeleton />
       </div>
     );
   }
