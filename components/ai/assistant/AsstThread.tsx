@@ -4,6 +4,8 @@ import React from "react";
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
 
+import { Skeleton } from "@/components/ui/skeleton";
+
 type AsstThreadProps = {
   thread: AsstThread;
 };
@@ -27,3 +29,15 @@ const AsstThread = ({ thread }: AsstThreadProps) => {
 };
 
 export default AsstThread;
+
+AsstThread.Skeleton = function AsstThreadSkeleton() {
+  return (
+    <div className="flex flex-col gap-y-2 rounded-md border border-gray-200 p-4 shadow-sm">
+      <Skeleton className="h-5 w-1/2 text-gray-500" />
+      <Skeleton className="h-5 w-1/2 text-gray-500" />
+      <div className="mt-4 flex justify-end">
+        <Skeleton className="h-8 w-24" />
+      </div>
+    </div>
+  );
+};

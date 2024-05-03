@@ -28,7 +28,7 @@ export const GET = async (req: Request) => {
     }
 
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      { error: `Internal Server Error: ${error}` },
       { status: 500 },
     );
   }
@@ -64,7 +64,7 @@ export const POST = async (req: Request) => {
     }
 
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      { error: `Internal Server Error: ${error}` },
       { status: 500 },
     );
   }
