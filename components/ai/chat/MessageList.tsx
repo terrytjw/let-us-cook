@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Message as VercelChatMessage } from "ai";
 import { cn } from "@/lib/utils";
 
@@ -33,20 +33,20 @@ const MessageList = ({ messages, isLoading }: MessageListProps) => {
             >
               <div
                 className={cn(
-                  "rounded-lg px-3 py-1 text-sm shadow-md ring-1 ring-gray-900/10",
+                  "rounded-lg p-3 text-sm shadow-md ring-1 ring-gray-900/10",
                   {
                     "bg-primary": message.role === "user",
                     "bg-secondary": message.role === "assistant",
                   },
                 )}
               >
-                <p>{message.content}</p>
+                {message.content}
               </div>
             </div>
           );
         })}
+        <ChatScrollAnchor trackVisibility={isLoading} />
       </div>
-      <ChatScrollAnchor trackVisibility={isLoading} />
     </ScrollArea>
   );
 };

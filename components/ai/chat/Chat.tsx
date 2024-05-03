@@ -7,10 +7,13 @@ import { Icons } from "@/components/Icons";
 import { Input } from "@/components/ui/input";
 import MessageList from "@/components/ai/chat/MessageList";
 
-export default function Chat() {
+type ChatProps = {
+  endpoint: string;
+};
+const Chat = ({ endpoint }: ChatProps) => {
   const { messages, input, handleInputChange, handleSubmit, isLoading } =
     useChat({
-      api: "/api/chat", // change depending on the api route you want to toggle
+      api: endpoint, // change depending on the api route you want to toggle
       // body: {
       //   chatId,
       // },
@@ -42,4 +45,6 @@ export default function Chat() {
       </form>
     </main>
   );
-}
+};
+
+export default Chat;

@@ -2,13 +2,13 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { customAlphabet } from "nanoid";
 
-import { Message as VercelChatMessage } from "ai";
+import { CoreMessage } from "ai";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const formatMessage = (message: VercelChatMessage) => {
+export const formatMessage = (message: CoreMessage) => {
   return `${message.role}: ${message.content}`;
 };
 

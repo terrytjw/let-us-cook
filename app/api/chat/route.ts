@@ -1,27 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/user";
-import { StreamingTextResponse } from "ai";
 import { AI_MODELS } from "@/lib/constants";
+import { ChatPostSchema } from "@/validations/chat";
 import { formatMessage } from "@/lib/utils";
 
-// Chat Models
-import { ChatAnthropic } from "@langchain/anthropic";
-import { ChatGroq } from "@langchain/groq";
-import { ChatOllama } from "@langchain/community/chat_models/ollama";
-import { ChatOpenAI } from "@langchain/openai";
-import { ChatTogetherAI } from "@langchain/community/chat_models/togetherai";
-
-// LangChain
-import { ChatPromptTemplate } from "@langchain/core/prompts";
-import { RunnableSequence } from "@langchain/core/runnables";
-import { HttpResponseOutputParser } from "langchain/output_parsers";
+import { StreamingTextResponse, streamText, CoreMessage } from "ai";
+import { openai } from "@ai-sdk/openai";
+import { anthropic } from "@ai-sdk/anthropic";
 
 export const runtime = "edge";
 
-const SYS_TEMPLATE = `You are a helpful AI assistant. All responses must be concise and provide actionable steps.
-
-Current conversation:
-{chat_history}
+const SYS_TEMPLATE = `You are a helpful AI assistant. All responses must be concise.
 `;
 
 /**
@@ -38,59 +27,21 @@ export const POST = async (req: NextRequest) => {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    const body = await req.json();
-    const messages = body.messages ?? [];
+    const json = await req.json();
+    const messages = ChatPostSchema.parse(json).messages as CoreMessage[];
     const formattedPreviousMessages = messages.slice(0, -1).map(formatMessage);
     const currentMessageContent = messages[messages.length - 1].content;
 
-    const prompt = ChatPromptTemplate.fromMessages([
-      ["system", SYS_TEMPLATE],
-      ["human", "{input}"],
-    ]);
-
-    /**
-     * See a full list of supported models at:
-     * https://js.langchain.com/docs/modules/model_io/models/
-     */
-
-    // Anthropic
-    // const model = new ChatAnthropic({
-    //   model: AI_MODELS.ANTHROPIC.HAIKU,
-    //   temperature: 0.8,
-    // });
-
-    // Groq
-    // const model = new ChatGroq({
-    //   model: AI_MODELS.GROQ.MIXTRAL_8X7B,
-    //   temperature: 0.8,
-    // });
-
-    // Ollama (local)
-    // const model = new ChatOllama({
-    //   baseUrl: "http://localhost:11434", // default port for Ollama running on your local machine
-    //   model: "llama3:latest", // string has to match the model you are running on your local Ollama
-    // });
-
-    // OpenAI
-    const model = new ChatOpenAI({
-      model: AI_MODELS.OPENAI.GPT_3,
-      temperature: 0.8,
+    const result = await streamText({
+      //   model: openai(AI_MODELS.OPENAI.GPT_4),
+      model: anthropic(AI_MODELS.ANTHROPIC.HAIKU),
+      system: SYS_TEMPLATE, // system prompt
+      messages: messages, // conversation history
+      temperature: 0.7, // temperature
+      //   maxTokens: 100, // max tokens
     });
 
-    // TogetherAI (currently buggy, do not use)
-    // const model = new ChatTogetherAI({
-    // model: "mistralai/Mixtral-8x22B-Instruct-v0.1",
-    //   temperature: 0.8,
-    // });
-
-    const outputParser = new HttpResponseOutputParser();
-
-    const chain = RunnableSequence.from([prompt, model, outputParser]);
-
-    const stream = await chain.stream({
-      chat_history: formattedPreviousMessages.join("\n"),
-      input: currentMessageContent,
-    });
+    const stream = result.toAIStream();
 
     return new StreamingTextResponse(stream);
   } catch (error: any) {
