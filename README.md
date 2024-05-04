@@ -57,7 +57,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 Run the following command to view the tables:
 
 ```zsh
-npx drizzle-kit studio
+bun studio
 ```
 
 ## Tech stack
@@ -68,3 +68,5 @@ npx drizzle-kit studio
 4. Supabase Auth - Managed Authentication
 5. DrizzleORM - ORM
 6. Supabase PostgresDB - Database
+7. Vercel AI SDK
+8. LangChain TS
