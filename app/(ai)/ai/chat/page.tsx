@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 
 import BackButton from "@/components/navigation/BackButton";
 import Chat from "@/components/ai/chat/Chat";
@@ -9,8 +10,31 @@ const ChatPage = () => {
       <h1 className="text-3xl font-bold">Chat with AI</h1>
       <section className="py-4">
         <p className="mb-4">
-          Current supported providers include Anthropic & OpenAI. Toggle between
-          them in{" "}
+          Current supported providers include{" "}
+          <Link
+            className="underline transition-all hover:text-primary"
+            href="https://sdk.vercel.ai/providers/ai-sdk-providers/anthropic"
+            target="_blank"
+          >
+            Anthropic
+          </Link>
+          ,{" "}
+          <Link
+            className="underline transition-all hover:text-primary"
+            href="https://sdk.vercel.ai/providers/ai-sdk-providers/groq"
+            target="_blank"
+          >
+            Groq
+          </Link>{" "}
+          &{" "}
+          <Link
+            className="underline transition-all hover:text-primary"
+            href="https://sdk.vercel.ai/providers/ai-sdk-providers/openai"
+            target="_blank"
+          >
+            OpenAI
+          </Link>
+          . Toggle between them in{" "}
           <span className="rounded border border-gray-400 p-1 font-mono text-gray-400">
             /api/chat/route.ts
           </span>

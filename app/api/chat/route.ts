@@ -1,14 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/user";
-import { AI_MODELS } from "@/lib/constants";
 import { ChatPostSchema } from "@/validations/chat";
 import { formatMessage } from "@/lib/utils";
 
+import { AI_MODELS } from "@/lib/constants";
 import { StreamingTextResponse, streamText, CoreMessage } from "ai";
-import { openai } from "@ai-sdk/openai";
+import { openai, createOpenAI } from "@ai-sdk/openai";
 import { anthropic } from "@ai-sdk/anthropic";
 
 export const runtime = "edge";
+
+const groq = createOpenAI({
+  baseURL: "https://api.groq.com/openai/v1",
+  apiKey: process.env.GROQ_API_KEY || "",
+});
 
 const SYS_TEMPLATE = `You are a helpful AI assistant. All responses must be concise.
 `;
@@ -34,7 +39,8 @@ export const POST = async (req: NextRequest) => {
 
     const result = await streamText({
       //   model: openai(AI_MODELS.OPENAI.GPT_4),
-      model: anthropic(AI_MODELS.ANTHROPIC.HAIKU),
+      //   model: anthropic(AI_MODELS.ANTHROPIC.HAIKU),
+      model: groq(AI_MODELS.GROQ.LLAMA3_70B),
       system: SYS_TEMPLATE, // system prompt
       messages: messages, // conversation history
       temperature: 0.7, // temperature
