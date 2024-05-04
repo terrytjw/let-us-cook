@@ -32,12 +32,10 @@ export default AsstThread;
 
 AsstThread.Skeleton = function AsstThreadSkeleton() {
   return (
-    <div className="flex flex-col gap-y-2 rounded-md border border-gray-200 p-4 shadow-sm">
+    <div className="flex flex-col gap-y-2 rounded-md border p-4 shadow-sm">
       <Skeleton className="h-5 w-1/2 text-gray-500" />
       <Skeleton className="h-5 w-1/2 text-gray-500" />
-      <div className="mt-4 flex justify-end">
-        <Skeleton className="h-8 w-24" />
-      </div>
+      <Skeleton className="h-5 w-1/3 text-gray-500" />
     </div>
   );
 };

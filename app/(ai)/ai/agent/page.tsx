@@ -2,7 +2,7 @@ import React from "react";
 
 import BackButton from "@/components/navigation/BackButton";
 import AssistantAction from "@/components/ai/assistant/AssistantAction";
-import ThreadList from "@/components/ai/assistant/AsstThreadList";
+import AsstThreadList from "@/components/ai/assistant/AsstThreadList";
 
 const AgentPage = () => {
   return (
@@ -18,7 +18,7 @@ const AgentPage = () => {
             /api/assistants-api/...
           </span>
         </p>
-        <ThreadList />
+        <AsstThreadList />
       </section>
       <div>
         <BackButton to="/ai" label="AI Dashboard" />
