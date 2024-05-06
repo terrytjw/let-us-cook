@@ -18,6 +18,12 @@ const aiPages = [
     href: "/ai/chat",
   },
   {
+    id: "code-gen",
+    name: "Code Generator",
+    description: "Generate code with AI",
+    href: "/ai/code-gen",
+  },
+  {
     id: "rag",
     name: "Retrieval Augmented Generation",
     description: "Enhance text with retrieval",

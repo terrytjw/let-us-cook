@@ -43,6 +43,7 @@ import {
   ChevronsDown,
   Send,
   ChefHat,
+  Search,
 } from "lucide-react";
 
 export const Icons = {
@@ -108,6 +109,7 @@ export const Icons = {
   user: IconUser,
   download: IconDownload,
   cook: ChefHat,
+  search: Search,
 };
 
 // TODO: all these below to be replaced with icons from Lucide
