@@ -10,6 +10,7 @@ import {
   requirementsManager,
   inquire,
   writer,
+  explainer,
   aiSuggestor,
 } from "@/lib/code-gen/agents";
 
@@ -71,9 +72,11 @@ async function submitUserInput(formData?: FormData, skip?: boolean) {
 
     //  Generate the code
     let code = "";
+    let explanation = "";
     let toolOutputs = [];
     let errorOccurred = false;
     const codeStream = createStreamableValue<string>();
+    const explanationStream = createStreamableValue<string>();
 
     uiStream.update(<Spinner message="Cooking up some kickass code..." />);
 
@@ -87,6 +90,17 @@ async function submitUserInput(formData?: FormData, skip?: boolean) {
       code = fullResponse;
       toolOutputs = toolResponses;
       errorOccurred = hasError;
+
+      uiStream.update(<Spinner message="Cooking up some explanation..." />);
+
+      const { fullExplanation, hasExplanationError } = await explainer(
+        uiStream,
+        explanationStream,
+        messages,
+        code,
+      );
+      explanation = fullExplanation;
+      errorOccurred = hasExplanationError;
     }
 
     if (!errorOccurred) {
@@ -103,7 +117,10 @@ async function submitUserInput(formData?: FormData, skip?: boolean) {
 
     isGenerating.done(false);
     uiStream.done();
-    aiState.done([...aiState.get(), { role: "assistant", content: code }]);
+    aiState.done([
+      ...aiState.get(),
+      { role: "assistant", content: code, explanation: explanation },
+    ]);
   }
 
   processEvents();
@@ -119,7 +136,8 @@ async function submitUserInput(formData?: FormData, skip?: boolean) {
 // Define the initial state of the AI. It can be any JSON object.
 export type AIState = {
   role: "user" | "assistant" | "system" | "function" | "tool";
-  content: string;
+  content?: string;
+  explanation?: string;
   id?: string;
   name?: string;
 }[];

@@ -1,6 +1,7 @@
 import { createStreamableUI, createStreamableValue } from "ai/rsc";
 import { CoreMessage, ToolCallPart, ToolResultPart, streamText } from "ai";
 import { openai, createOpenAI } from "@ai-sdk/openai";
+import { anthropic } from "@ai-sdk/anthropic";
 import { AI_MODELS } from "@/lib/constants";
 import { kbSearchSchema } from "@/validations/code-gen/search";
 
@@ -54,15 +55,16 @@ export const writer = async (
 ) => {
   let fullResponse = "";
   let hasError = false;
-  const answerSection = (
+  const codeSection = (
     <Section title="Code">
-      <BotMessage content={codeStream.value} />
+      <BotMessage content={codeStream.value} size="lg" />
     </Section>
   );
 
   let isFirstToolResponse = true;
   const result = await streamText({
     // model: openai(AI_MODELS.OPENAI.GPT_3),
+    // model: anthropic(AI_MODELS.ANTHROPIC.HAIKU),
     model: groq(AI_MODELS.GROQ.LLAMA3_70B),
     // maxTokens: 2500,
     system: CODE_SYS_INSTRUCTIONS,
@@ -104,7 +106,7 @@ export const writer = async (
           // If the first text delta is available, add a ui section
           if (fullResponse.length === 0 && delta.textDelta.length > 0) {
             // Updates the current UI node. It takes a new UI node and replaces the old one.
-            uiStream.update(answerSection);
+            uiStream.update(codeSection);
 
             // Appends a new UI node to the end of the old one (answerSection). Once the Spinner has been appended a new UI node, the answer section node cannot be updated anymore.
             uiStream.append(

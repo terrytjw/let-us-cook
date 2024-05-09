@@ -162,20 +162,25 @@ const Copilot = ({ inquiry }: CopilotProps) => {
             />
           </div>
         )}
-        <div className="flex justify-end space-x-2">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={handleSkip}
-            disabled={pending}
-          >
-            <Icons.fastForward size={16} className="mr-1" />
-            Skip
-          </Button>
-          <Button type="submit" disabled={isButtonDisabled || pending}>
-            <Icons.arrowRight size={16} className="mr-1" />
-            Proceed
-          </Button>
+        <div className="flex">
+          <p className="mr-auto h-fit rounded border border-green-500 bg-green-500/10 px-2 py-1 text-sm text-green-500">
+            Powered by GPT-4-turbo
+          </p>
+          <div className="flex gap-x-2">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleSkip}
+              disabled={pending}
+            >
+              <Icons.fastForward size={16} className="mr-1" />
+              Skip
+            </Button>
+            <Button type="submit" disabled={isButtonDisabled || pending}>
+              <Icons.arrowRight size={16} className="mr-1" />
+              Proceed
+            </Button>
+          </div>
         </div>
       </form>
     </Card>

@@ -27,26 +27,55 @@ const Section = ({
   separator = false,
 }: SectionProps) => {
   let icon: React.ReactNode;
+  let poweredBy = "";
+
   switch (title) {
     case "Images":
       // eslint-disable-next-line jsx-a11y/alt-text
       icon = <Icons.media size={18} className="mr-2" />;
       break;
+
     case "Sources":
       icon = <Icons.newspaper size={18} className="mr-2" />;
       break;
+
     case "Code":
       icon = <Icons.code size={18} className="mr-2" />;
+      poweredBy = "Llama-3-70b (Groq)";
       break;
+
+    case "Explanation":
+      icon = <Icons.bookOpen size={18} className="mr-2" />;
+      poweredBy = "Claude Haiku";
+      break;
+
     case "AI Suggestions":
       icon = <Icons.messageCircleMore size={18} className="mr-2" />;
+      poweredBy = "GPT-4-turbo";
       break;
+
     case "Custom prompt":
       icon = <Icons.idea size={18} className="mr-2" />;
       break;
+
     default:
       icon = null;
   }
+
+  const poweredByTag = (
+    <p
+      className={cn("ml-2 rounded border px-2 py-1 text-sm", {
+        "border-orange-500 bg-orange-500/10 text-orange-500":
+          poweredBy === "Llama-3-70b (Groq)",
+        "border-yellow-600 bg-yellow-600/10 text-yellow-600":
+          poweredBy === "Claude Haiku",
+        "border-green-500 bg-green-500/10 text-green-500":
+          poweredBy === "GPT-4-turbo",
+      })}
+    >
+      Powered by {poweredBy}
+    </p>
+  );
 
   return (
     <>
@@ -61,8 +90,10 @@ const Section = ({
           <div className="mb-2 flex items-center py-2 text-lg leading-none">
             {icon}
             {title}
-            <div className="ml-auto">
-              {title === "AI Suggestions" && (
+            {poweredBy && poweredByTag}
+
+            {title === "AI Suggestions" && (
+              <div className="ml-auto">
                 <TooltipProvider delayDuration={150}>
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -77,13 +108,14 @@ const Section = ({
                     >
                       <p>
                         AI recommended suggestions to help you improve contract
-                        security and features.
+                        security and features. Hover over each option to see
+                        more.
                       </p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         )}
         {children}

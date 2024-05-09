@@ -51,6 +51,7 @@ import {
   Code,
   MessageCircleMore,
   ArrowDownToLine,
+  BookOpen,
 } from "lucide-react";
 
 export const Icons = {
@@ -144,4 +145,5 @@ export const Icons = {
   newspaper: Newspaper,
   code: Code,
   messageCircleMore: MessageCircleMore,
+  bookOpen: BookOpen,
 };

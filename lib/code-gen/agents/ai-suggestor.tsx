@@ -5,10 +5,11 @@ import {
   PartialSuggestions,
   suggestionsSchema,
 } from "@/validations/code-gen/suggestions";
+import { AI_MODELS } from "@/lib/constants";
 
 import Section from "@/components/ai/code-gen/Section";
 import BuildSuggestion from "@/components/ai/code-gen/BuildSuggestion";
-import { AI_MODELS } from "@/lib/constants";
+import Spinner from "@/components/Spinner";
 
 const CODE_SYS_INSTRUCTIONS = `As a professional Solidity developer, your task is to generate as many suggestions as possible that either enhance the solidity contract code or add new features. The suggestions provided should build upon the existing code, the user's input, and your own insights on what the user might need.
 
@@ -38,6 +39,11 @@ export async function aiSuggestor(
       <BuildSuggestion aiSuggestions={objectStream.value} />
     </Section>,
   );
+  uiStream.append(
+    <div className="mt-2 flex justify-end">
+      <Spinner message="Generating suggestions..." />
+    </div>,
+  );
 
   await streamObject({
     model: openai(AI_MODELS.OPENAI.GPT_4),
@@ -51,6 +57,7 @@ export async function aiSuggestor(
       }
     })
     .finally(() => {
+      uiStream.update(null);
       objectStream.done();
     });
 }

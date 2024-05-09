@@ -1,6 +1,7 @@
 "use client";
 
 import { StreamableValue, useStreamableValue } from "ai/rsc";
+import { cn } from "@/lib/utils";
 
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { MemoizedReactMarkdown } from "@/components/Markdown";
@@ -9,8 +10,9 @@ import remarkGfm from "remark-gfm";
 
 type BotMessageProps = {
   content: string | StreamableValue<string>;
+  size: "sm" | "lg";
 };
-const BotMessage = ({ content }: BotMessageProps) => {
+const BotMessage = ({ content, size = "lg" }: BotMessageProps) => {
   const [data, error, pending] = useStreamableValue(content);
 
   // Currently, sometimes error occurs after finishing the stream.
@@ -18,7 +20,10 @@ const BotMessage = ({ content }: BotMessageProps) => {
 
   return (
     <ScrollArea
-      className="h-96 rounded-md border bg-primary/5 p-4"
+      className={cn(
+        "rounded-md border bg-primary/5 p-4",
+        size === "lg" ? "h-96" : "h-48",
+      )}
       type="always"
     >
       <MemoizedReactMarkdown
