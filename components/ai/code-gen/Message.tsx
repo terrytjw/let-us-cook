@@ -27,9 +27,35 @@ const BotMessage = ({ content, size = "lg" }: BotMessageProps) => {
       type="always"
     >
       <MemoizedReactMarkdown
+        className="prose-sm prose-neutral prose-a:text-accent-foreground/50 text-sm"
         rehypePlugins={[[rehypeExternalLinks, { target: "_blank" }]]}
         remarkPlugins={[remarkGfm]}
-        className="prose-sm prose-neutral prose-a:text-accent-foreground/50 text-sm"
+        components={{
+          p({ children }) {
+            return <p className="mb-2 last:mb-0">{children}</p>;
+          },
+          ol({ children, ...props }) {
+            return (
+              <ol className="mb-2 last:mb-0" {...props}>
+                {children}
+              </ol>
+            );
+          },
+          ul({ children, ...props }) {
+            return (
+              <ul className="mb-2 list-inside list-disc last:mb-0" {...props}>
+                {children}
+              </ul>
+            );
+          },
+          li({ children, ...props }) {
+            return (
+              <li className="mb-1 last:mb-0" {...props}>
+                {children}
+              </li>
+            );
+          },
+        }}
       >
         {data}
       </MemoizedReactMarkdown>
