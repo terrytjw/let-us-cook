@@ -13,25 +13,25 @@ export function ChatPanel() {
   const [messages, setMessages] = useUIState<typeof AI>();
   const [aiMessages, setAiMessages] = useAIState<typeof AI>();
   const { submitUserInput } = useActions<typeof AI>();
-  const [isButtonPressed, setIsButtonPressed] = useState(false);
+  const [isNewButtonPressed, setIsNewButtonPressed] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const [showEmptyScreen, setShowEmptyScreen] = useState(false);
 
-  // Focus on input when button is pressed
+  // Focus on input when the "New" button is pressed
   useEffect(() => {
-    if (isButtonPressed) {
+    if (isNewButtonPressed) {
       inputRef.current?.focus();
-      setIsButtonPressed(false);
+      setIsNewButtonPressed(false);
     }
-  }, [isButtonPressed]);
+  }, [isNewButtonPressed]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Clear messages if button is pressed
-    if (isButtonPressed) {
+    // Clear messages if the "New" button is pressed
+    if (isNewButtonPressed) {
       handleClear();
-      setIsButtonPressed(false);
+      setIsNewButtonPressed(false);
     }
 
     // Add user message to UI state
@@ -56,7 +56,7 @@ export function ChatPanel() {
 
   // Clear messages
   const handleClear = () => {
-    setIsButtonPressed(true);
+    setIsNewButtonPressed(true);
     setMessages([]);
     setAiMessages([]);
   };
@@ -87,8 +87,8 @@ export function ChatPanel() {
     };
   }, []);
 
-  // If there are messages and the new button has not been pressed, display the new Button
-  if (messages.length > 0 && !isButtonPressed) {
+  // If there are messages and the "New" button has not been pressed, display the New Button
+  if (messages.length > 0 && !isNewButtonPressed) {
     return (
       <div className="pointer-events-none fixed bottom-2 left-0 right-0 mx-auto flex items-center justify-center md:bottom-8">
         <Button
@@ -106,6 +106,7 @@ export function ChatPanel() {
     );
   }
 
+  // this component is not rendered if there are messages
   return (
     <div
       className={
@@ -113,9 +114,9 @@ export function ChatPanel() {
       }
     >
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Solidity Code Generator</h1>
+        <h1 className="text-3xl font-bold">Solidity Code Cooker</h1>
       </div>
-      <p className="mb-4 mt-2">
+      <p className="mb-4 mt-2 text-sm text-muted-foreground">
         Find related code in{" "}
         <span className="rounded border border-gray-400 p-1 font-mono text-gray-400">
           /lib/code-gen/actions.tsx

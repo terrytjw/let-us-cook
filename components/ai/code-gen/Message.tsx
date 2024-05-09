@@ -18,7 +18,10 @@ export function BotMessage({
   if (error) return <div>Error</div>;
 
   return (
-    <ScrollArea className="h-96 rounded-md border p-4">
+    <ScrollArea
+      className="h-96 rounded-md border bg-primary/5 p-4"
+      type="always"
+    >
       <MemoizedReactMarkdown
         rehypePlugins={[[rehypeExternalLinks, { target: "_blank" }]]}
         remarkPlugins={[remarkGfm]}

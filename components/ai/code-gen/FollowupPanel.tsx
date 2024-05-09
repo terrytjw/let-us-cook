@@ -43,7 +43,7 @@ export function FollowupPanel() {
         autoComplete="off"
         type="text"
         name="input"
-        placeholder="Refine your dApp further..."
+        placeholder="Got some other ideas? Fire away."
         value={input}
         className="h-12 pr-14"
         onChange={(e) => setInput(e.target.value)}

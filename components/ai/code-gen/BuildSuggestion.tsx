@@ -8,6 +8,13 @@ import { PartialSuggestions } from "@/validations/code-gen/suggestions";
 import { ArrowRight } from "lucide-react";
 import { UserMessage } from "@/components/ai/code-gen/UserMessage";
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export interface BuildSuggestionProps {
   aiSuggestions: PartialSuggestions;
@@ -47,22 +54,44 @@ export const BuildSuggestion: React.FC<BuildSuggestionProps> = ({
     ]);
   };
 
+  if (pending && !data) {
+    return (
+      <div className="flex flex-wrap gap-2">
+        <Skeleton className="h-8 w-44" />
+        <Skeleton className="h-8 w-44" />
+        <Skeleton className="h-8 w-44" />
+        <Skeleton className="h-8 w-44" />
+      </div>
+    );
+  }
+
   return (
-    <form onSubmit={handleSubmit} className="flex flex-wrap gap-x-2">
+    <form onSubmit={handleSubmit} className="flex flex-wrap gap-2">
       {data?.items
         ?.filter((item) => item?.label !== "")
         .map((item, index) => (
-          <Button
-            className="flex gap-x-2 whitespace-normal text-left font-semibold transition-all hover:border-primary hover:bg-primary/0 hover:text-primary"
-            variant="outline"
-            type="submit"
-            name={"related_query"}
-            value={item?.prompt}
-            key={index}
-          >
-            {item?.label}
-            <ArrowRight className="h-4 w-4" />
-          </Button>
+          <TooltipProvider delayDuration={150} key={index}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  className="flex gap-x-2 whitespace-normal text-left font-semibold transition-all hover:border-primary hover:bg-primary/0 hover:text-primary"
+                  variant="outline"
+                  type="submit"
+                  name={"related_query"}
+                  value={item?.prompt}
+                >
+                  {item?.label}
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent
+                className="w-60 border border-primary p-4 font-medium"
+                side="bottom"
+              >
+                {item?.prompt}
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         ))}
     </form>
   );

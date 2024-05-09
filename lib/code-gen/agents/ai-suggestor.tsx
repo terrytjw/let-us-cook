@@ -10,20 +10,23 @@ import { Section } from "@/components/ai/code-gen/Section";
 import BuildSuggestion from "@/components/ai/code-gen/BuildSuggestion";
 import { AI_MODELS } from "@/lib/constants";
 
-const CODE_SYS_INSTRUCTIONS = `As a professional Solidity developer, your task is to generate a set of three suggestions that enhance the solidity contract code, building upon the initial code review and the insights uncovered during the analysis.
+const CODE_SYS_INSTRUCTIONS = `As a professional Solidity developer, your task is to generate as many suggestions as possible that either enhance the solidity contract code or add new features. The suggestions provided should build upon the existing code, the user's input, and your own insights on what the user might need.
 
-    For instance, if the initial review highlighted issues with gas optimization in a token contract, your output should follow this format:
-
+    For example, your output should follow this format:
     "{
-      "improvements": [
+      "items": [
         {"label": "Optimize gas", "prompt": "Optimize the loop in the transfer function to reduce gas cost by minimizing state variable writes."},
         {"label": "Prevent reentrancy attacks", "prompt": "Implement checks-effects-interactions pattern to prevent reentrancy attacks."},
-        {"label": "Reduce deployment and transaction costs", "prompt": "Refactor the contract to use library contracts for common functions to reduce deployment and transaction costs."}
+        {"label": "Reduce transaction costs", "prompt": "Refactor the contract to use library contracts for common functions to reduce transaction costs."},
+        {"label": "Implement example feature", "prompt": "Implement a cool feature that is not present in the contract."}
       ]
     }"
 
-    Aim to create suggestions that progressively delve into more specific aspects of security, efficiency, or maintainability related to the initial code. The goal is to anticipate the developer's potential needs for contract improvement and guide them towards a more robust and optimized smart contract.
-    Please match the language of the response to the user's language.`;
+    Ensure that all labels have maximum 3 words and prompts are concise and to the point.
+
+    Aim to create suggestions that progressively improve the contract's security and enhances the contract's features. The goal is to anticipate the developer's potential needs for contract improvement and guide them towards a more robust and feature-rich smart contract.
+    Take into account the user's request for any code changes and the code being generated previously to ensure that your suggestions provided are not a repeat of what has already been implemented in the existing code.
+    `;
 
 export async function aiSuggestor(
   uiStream: ReturnType<typeof createStreamableUI>,

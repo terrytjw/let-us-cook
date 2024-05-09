@@ -1,4 +1,4 @@
-import { CoreMessage, streamObject } from "ai";
+import { CoreMessage, streamObject, tool } from "ai";
 import { createStreamableUI, createStreamableValue } from "ai/rsc";
 import { openai } from "@ai-sdk/openai";
 import { AI_MODELS } from "@/lib/constants";
@@ -38,8 +38,8 @@ const CODE_SYS_INSTRUCTIONS = `As a professional Solidity developer, your role i
     }
 
     By providing predefined options, you guide the user towards the most relevant aspects of their smart contract needs, while the free-form input allows them to provide additional context or specific details not covered by the options.
-    Remember, your goal is to gather the necessary information to deliver a secure and functional smart contract.
-    Please match the language of the response to the user's language.`;
+    Remember, your goal is to gather the necessary information to deliver a secure, functional and feature-rich smart contract.
+    `;
 
 export async function inquire(
   uiStream: ReturnType<typeof createStreamableUI>,

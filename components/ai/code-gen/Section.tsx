@@ -6,12 +6,17 @@ import {
   Image,
   MessageCircleMore,
   Newspaper,
-  Repeat2,
-  Search,
-  Pickaxe,
+  Lightbulb,
 } from "lucide-react";
 import React from "react";
 import { Separator } from "@/components/ui/separator";
+import { Icons } from "@/components/Icons";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 type SectionProps = {
   children: React.ReactNode;
@@ -39,14 +44,14 @@ export const Section = ({
     case "Code":
       icon = <Code size={18} className="mr-2" />;
       break;
-    case "Related":
-      icon = <Repeat2 size={18} className="mr-2" />;
+    case "AI Suggestions":
+      icon = <MessageCircleMore size={18} className="mr-2" />;
       break;
-    case "Follow-up":
-      icon = <Pickaxe size={18} className="mr-2" />;
+    case "Custom prompt":
+      icon = <Lightbulb size={18} className="mr-2" />;
       break;
     default:
-      icon = <MessageCircleMore size={18} className="mr-2" />;
+      icon = null;
   }
 
   return (
@@ -59,10 +64,33 @@ export const Section = ({
         )}
       >
         {title && (
-          <h2 className="mb-2 flex items-center py-2 text-lg leading-none">
+          <div className="mb-2 flex items-center py-2 text-lg leading-none">
             {icon}
             {title}
-          </h2>
+            <div className="ml-auto">
+              {title === "AI Suggestions" && (
+                <TooltipProvider delayDuration={150}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Icons.info
+                        size={18}
+                        className="ml-1 transition-all hover:text-primary"
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent
+                      className="w-60 border border-primary p-4 font-medium"
+                      side="top"
+                    >
+                      <p>
+                        AI recommended suggestions to help you improve contract
+                        security and features.
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )}
+            </div>
+          </div>
         )}
         {children}
       </section>

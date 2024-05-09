@@ -44,6 +44,8 @@ import {
   Send,
   ChefHat,
   Search,
+  CheckCircle,
+  Lightbulb,
 } from "lucide-react";
 
 export const Icons = {
@@ -110,6 +112,8 @@ export const Icons = {
   download: IconDownload,
   cook: ChefHat,
   search: Search,
+  checkCircle: CheckCircle,
+  idea: Lightbulb,
 };
 
 // TODO: all these below to be replaced with icons from Lucide

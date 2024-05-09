@@ -16,6 +16,7 @@ import {
   writer,
   aiSuggestor,
 } from "@/lib/code-gen/agents";
+import { Skeleton } from "@/components/ui/skeleton";
 
 async function submitUserInput(formData?: FormData, skip?: boolean) {
   "use server";
@@ -75,7 +76,7 @@ async function submitUserInput(formData?: FormData, skip?: boolean) {
     let errorOccurred = false;
     const codeStream = createStreamableValue<string>();
 
-    uiStream.update(<Spinner message="Assistant thinking..." />);
+    uiStream.update(<Spinner message="Cooking up some kickass code..." />);
 
     while (code.length === 0) {
       // Search blink KB and generate the code
@@ -95,7 +96,7 @@ async function submitUserInput(formData?: FormData, skip?: boolean) {
 
       // Add follow-up panel
       uiStream.append(
-        <Section title="Follow-up">
+        <Section title="Custom prompt">
           <FollowupPanel />
         </Section>,
       );
@@ -117,20 +118,22 @@ async function submitUserInput(formData?: FormData, skip?: boolean) {
 }
 
 // Define the initial state of the AI. It can be any JSON object.
-const initialAIState: {
+export type AIState = {
   role: "user" | "assistant" | "system" | "function" | "tool";
   content: string;
   id?: string;
   name?: string;
-}[] = [];
+}[];
+const initialAIState: AIState = [];
 
 // The initial UI state that the client will keep track of, which contains the message IDs and their UI nodes.
-const initialUIState: {
+export type UIState = {
   id: number;
+  component: React.ReactNode;
   isGenerating?: StreamableValue<boolean>;
   isCollapsed?: StreamableValue<boolean>;
-  component: React.ReactNode;
-}[] = [];
+}[];
+const initialUIState: UIState = [];
 
 // AI is a provider you wrap your application with so you can access AI and UI state in your components.
 export const AI = createAI({
