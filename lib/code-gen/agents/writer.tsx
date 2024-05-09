@@ -4,8 +4,8 @@ import { openai, createOpenAI } from "@ai-sdk/openai";
 import { AI_MODELS } from "@/lib/constants";
 import { kbSearchSchema } from "@/validations/code-gen/search";
 
-import { Section } from "@/components/ai/code-gen/Section";
-import { BotMessage } from "@/components/ai/code-gen/Message";
+import Section from "@/components/ai/code-gen/Section";
+import BotMessage from "@/components/ai/code-gen/Message";
 import Spinner from "@/components/Spinner";
 import ToolCallComplete from "@/components/ai/code-gen/ToolCallComplete";
 

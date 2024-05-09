@@ -43,7 +43,7 @@ const AssistantAction = () => {
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     const threadId = await createThread(data.message);
-    console.log("threadId -> ", threadId);
+    console.info("created threadId: ", threadId);
 
     toast({
       title: "You submitted the following values:",

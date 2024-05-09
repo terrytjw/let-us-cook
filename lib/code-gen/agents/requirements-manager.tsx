@@ -26,7 +26,7 @@ export const requirementsManager = async (messages: CoreMessage[]) => {
       system: CODE_SYS_INSTRUCTIONS,
       messages,
       schema: nextActionSchema,
-      temperature: 0.2,
+      temperature: 0.2, // less creative as you want the AI to be deterministic when it comes to deciding whether a kind of prompt is vague or not
     });
 
     return result;

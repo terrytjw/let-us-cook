@@ -4,12 +4,12 @@ import { useState } from "react";
 import { useActions, useUIState } from "ai/rsc";
 import { AI } from "@/lib/code-gen/actions";
 
-import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { UserMessage } from "@/components/ai/code-gen/UserMessage";
+import UserMessage from "@/components/ai/code-gen/UserMessage";
+import { Icons } from "@/components/Icons";
 
-export function FollowupPanel() {
+const FollowupPanel = () => {
   const [input, setInput] = useState("");
   const { submitUserInput } = useActions<typeof AI>();
   const [, setMessages] = useUIState<typeof AI>();
@@ -55,8 +55,10 @@ export function FollowupPanel() {
         variant={"ghost"}
         className="absolute right-1"
       >
-        <ArrowRight size={20} />
+        <Icons.arrowRight size={20} />
       </Button>
     </form>
   );
-}
+};
+
+export default FollowupPanel;

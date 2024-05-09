@@ -6,7 +6,7 @@ import {
   suggestionsSchema,
 } from "@/validations/code-gen/suggestions";
 
-import { Section } from "@/components/ai/code-gen/Section";
+import Section from "@/components/ai/code-gen/Section";
 import BuildSuggestion from "@/components/ai/code-gen/BuildSuggestion";
 import { AI_MODELS } from "@/lib/constants";
 

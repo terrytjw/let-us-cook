@@ -4,7 +4,7 @@ import { openai } from "@ai-sdk/openai";
 import { AI_MODELS } from "@/lib/constants";
 import { PartialInquiry, inquirySchema } from "@/validations/code-gen/inquire";
 
-import { Copilot } from "@/components/ai/code-gen/Copilot";
+import Copilot from "@/components/ai/code-gen/Copilot";
 
 const CODE_SYS_INSTRUCTIONS = `As a professional Solidity developer, your role is to deepen your understanding of the user's requirements for smart contracts by conducting further inquiries when necessary.
     After receiving an initial description from the user, carefully assess whether additional questions are absolutely essential to design a secure and functional smart contract. Only proceed with further inquiries if the provided information is insufficient or ambiguous.

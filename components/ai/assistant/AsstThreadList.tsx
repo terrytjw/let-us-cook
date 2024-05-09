@@ -20,8 +20,6 @@ const AsstThreadList = () => {
     },
   );
 
-  console.log("threads ->", threads);
-
   if (isThreadsLoading) {
     return (
       <div className="grid grid-cols-1 gap-4 py-4 md:grid-cols-2 lg:grid-cols-3">

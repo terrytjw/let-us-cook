@@ -1,28 +1,28 @@
 import React, { useEffect, useState } from "react";
+import { StreamableValue, useStreamableValue } from "ai/rsc";
+import { cn } from "@/lib/utils";
+
+import { Button } from "@/components/ui/button";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { Button } from "@/components/ui/button";
-import { ChevronDown } from "lucide-react";
-import { StreamableValue, useStreamableValue } from "ai/rsc";
-import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
+import { Icons } from "@/components/Icons";
 
-interface CollapsibleMessageProps {
+type CollapsibleMessageProps = {
   message: {
     id: number;
     isCollapsed?: StreamableValue<boolean>;
     component: React.ReactNode;
   };
   isLastMessage?: boolean;
-}
-
-export const CollapsibleMessage: React.FC<CollapsibleMessageProps> = ({
+};
+const CollapsibleMessage = ({
   message,
   isLastMessage = false,
-}) => {
+}: CollapsibleMessageProps) => {
   const [data] = useStreamableValue(message.isCollapsed);
   const isCollapsed = data ?? false;
   const [open, setOpen] = useState(isLastMessage);
@@ -55,7 +55,7 @@ export const CollapsibleMessage: React.FC<CollapsibleMessageProps> = ({
             size={"icon"}
             className={cn("-mt-3 rounded-full")}
           >
-            <ChevronDown
+            <Icons.chevronDown
               className={cn(
                 open ? "rotate-180" : "rotate-0",
                 "h-4 w-4 transition-all",
@@ -70,3 +70,5 @@ export const CollapsibleMessage: React.FC<CollapsibleMessageProps> = ({
     </Collapsible>
   );
 };
+
+export default CollapsibleMessage;

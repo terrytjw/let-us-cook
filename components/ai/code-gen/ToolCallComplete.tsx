@@ -3,8 +3,6 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-import { Icons } from "@/components/Icons";
-
 // TODO(code-gen): ensure this component is only rendered once
 // currently, the component is re-rendered multiple times at once which causes a visual bug of the path being animated twice
 type ToolCallCompleteProps = {

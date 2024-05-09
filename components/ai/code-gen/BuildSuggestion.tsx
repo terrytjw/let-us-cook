@@ -5,8 +5,7 @@ import { useActions, useStreamableValue, useUIState } from "ai/rsc";
 import { AI } from "@/lib/code-gen/actions";
 import { PartialSuggestions } from "@/validations/code-gen/suggestions";
 
-import { ArrowRight } from "lucide-react";
-import { UserMessage } from "@/components/ai/code-gen/UserMessage";
+import UserMessage from "@/components/ai/code-gen/UserMessage";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -15,14 +14,12 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Icons } from "@/components/Icons";
 
-export interface BuildSuggestionProps {
+type BuildSuggestionProps = {
   aiSuggestions: PartialSuggestions;
-}
-
-export const BuildSuggestion: React.FC<BuildSuggestionProps> = ({
-  aiSuggestions,
-}) => {
+};
+const BuildSuggestion = ({ aiSuggestions }: BuildSuggestionProps) => {
   const { submitUserInput } = useActions<typeof AI>();
   const [, setMessages] = useUIState<typeof AI>();
   const [data, error, pending] =
@@ -81,7 +78,7 @@ export const BuildSuggestion: React.FC<BuildSuggestionProps> = ({
                   value={item?.prompt}
                 >
                   {item?.label}
-                  <ArrowRight className="h-4 w-4" />
+                  <Icons.arrowRight className="h-4 w-4" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent

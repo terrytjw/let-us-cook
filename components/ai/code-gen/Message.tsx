@@ -7,11 +7,10 @@ import { MemoizedReactMarkdown } from "@/components/Markdown";
 import rehypeExternalLinks from "rehype-external-links";
 import remarkGfm from "remark-gfm";
 
-export function BotMessage({
-  content,
-}: {
+type BotMessageProps = {
   content: string | StreamableValue<string>;
-}) {
+};
+const BotMessage = ({ content }: BotMessageProps) => {
   const [data, error, pending] = useStreamableValue(content);
 
   // Currently, sometimes error occurs after finishing the stream.
@@ -31,4 +30,6 @@ export function BotMessage({
       </MemoizedReactMarkdown>
     </ScrollArea>
   );
-}
+};
+
+export default BotMessage;

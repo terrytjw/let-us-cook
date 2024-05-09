@@ -2,28 +2,23 @@ import { useEffect, useState, useRef } from "react";
 import type { AI } from "@/lib/code-gen/actions";
 import { useUIState, useActions, useAIState } from "ai/rsc";
 import { cn } from "@/lib/utils";
-import { UserMessage } from "@/components/ai/code-gen/UserMessage";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { ArrowRight, Plus, Square } from "lucide-react";
-import { EmptyScreen } from "@/components/ai/code-gen/EmptyScreen";
 
-export function ChatPanel() {
-  const [input, setInput] = useState("");
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import UserMessage from "@/components/ai/code-gen/UserMessage";
+import EmptyScreen from "@/components/ai/code-gen/EmptyScreen";
+import { Icons } from "@/components/Icons";
+
+const ChatPanel = () => {
   const [messages, setMessages] = useUIState<typeof AI>();
   const [aiMessages, setAiMessages] = useAIState<typeof AI>();
   const { submitUserInput } = useActions<typeof AI>();
+
+  const [input, setInput] = useState("");
   const [isNewButtonPressed, setIsNewButtonPressed] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
   const [showEmptyScreen, setShowEmptyScreen] = useState(false);
 
-  // Focus on input when the "New" button is pressed
-  useEffect(() => {
-    if (isNewButtonPressed) {
-      inputRef.current?.focus();
-      setIsNewButtonPressed(false);
-    }
-  }, [isNewButtonPressed]);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -60,6 +55,14 @@ export function ChatPanel() {
     setMessages([]);
     setAiMessages([]);
   };
+
+  // Focus on input when the "New" button is pressed
+  useEffect(() => {
+    if (isNewButtonPressed) {
+      inputRef.current?.focus();
+      setIsNewButtonPressed(false);
+    }
+  }, [isNewButtonPressed]);
 
   useEffect(() => {
     // focus on input when the page loads
@@ -100,7 +103,10 @@ export function ChatPanel() {
           <span className="mr-2 hidden text-sm duration-300 animate-in fade-in group-hover:block">
             New
           </span>
-          <Plus size={18} className="transition-all group-hover:rotate-90" />
+          <Icons.plus
+            size={18}
+            className="transition-all group-hover:rotate-90"
+          />
         </Button>
       </div>
     );
@@ -146,11 +152,11 @@ export function ChatPanel() {
             className="absolute right-2 top-1/2 -translate-y-1/2 transform"
             disabled={input.length === 0}
           >
-            <ArrowRight size={20} />
+            <Icons.arrowRight size={20} />
           </Button>
         </div>
         <EmptyScreen
-          submitMessage={(message) => {
+          submitMessage={(message: string) => {
             setInput(message);
           }}
           className={cn(showEmptyScreen ? "visible" : "invisible")}
@@ -158,4 +164,6 @@ export function ChatPanel() {
       </form>
     </div>
   );
-}
+};
+
+export default ChatPanel;

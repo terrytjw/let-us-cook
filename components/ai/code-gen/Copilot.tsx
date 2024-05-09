@@ -10,15 +10,12 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowRight, Check, FastForward, Sparkles } from "lucide-react";
 import { Icons } from "@/components/Icons";
-import { Skeleton } from "@/components/ui/skeleton";
 
-export type CopilotProps = {
+type CopilotProps = {
   inquiry?: PartialInquiry;
 };
-
-export const Copilot: React.FC<CopilotProps> = ({ inquiry }: CopilotProps) => {
+const Copilot = ({ inquiry }: CopilotProps) => {
   const [completed, setCompleted] = useState(false);
   const [query, setQuery] = useState("");
   const [skipped, setSkipped] = useState(false);
@@ -86,7 +83,7 @@ export const Copilot: React.FC<CopilotProps> = ({ inquiry }: CopilotProps) => {
     return (
       <Card className="flex w-full items-center justify-between p-4">
         <div className="flex items-center space-x-2">
-          <Sparkles className="h-4 w-4" />
+          <Icons.sparkles className="h-4 w-4" />
           <h5 className="truncate text-xs text-muted-foreground">
             {`error: ${error}`}
           </h5>
@@ -108,7 +105,7 @@ export const Copilot: React.FC<CopilotProps> = ({ inquiry }: CopilotProps) => {
             {updatedQuery()}
           </h5>
         </div>
-        <Check size={16} className="h-4 w-4 text-green-500" />
+        <Icons.check size={16} className="h-4 w-4 text-green-500" />
       </Card>
     );
   }
@@ -172,11 +169,11 @@ export const Copilot: React.FC<CopilotProps> = ({ inquiry }: CopilotProps) => {
             onClick={handleSkip}
             disabled={pending}
           >
-            <FastForward size={16} className="mr-1" />
+            <Icons.fastForward size={16} className="mr-1" />
             Skip
           </Button>
           <Button type="submit" disabled={isButtonDisabled || pending}>
-            <ArrowRight size={16} className="mr-1" />
+            <Icons.arrowRight size={16} className="mr-1" />
             Proceed
           </Button>
         </div>
@@ -184,3 +181,5 @@ export const Copilot: React.FC<CopilotProps> = ({ inquiry }: CopilotProps) => {
     </Card>
   );
 };
+
+export default Copilot;

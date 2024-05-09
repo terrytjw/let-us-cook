@@ -6,17 +6,16 @@ import {
   getMutableAIState,
 } from "ai/rsc";
 import { CoreMessage } from "ai";
-
-import Spinner from "@/components/Spinner";
-import { Section } from "@/components/ai/code-gen/Section";
-import { FollowupPanel } from "@/components/ai/code-gen/FollowupPanel";
 import {
   requirementsManager,
   inquire,
   writer,
   aiSuggestor,
 } from "@/lib/code-gen/agents";
-import { Skeleton } from "@/components/ui/skeleton";
+
+import Spinner from "@/components/Spinner";
+import Section from "@/components/ai/code-gen/Section";
+import FollowupPanel from "@/components/ai/code-gen/FollowupPanel";
 
 async function submitUserInput(formData?: FormData, skip?: boolean) {
   "use server";

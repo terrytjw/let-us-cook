@@ -1,6 +1,6 @@
 import { AI } from "@/lib/code-gen/actions";
 
-import { CodeGenChat } from "@/components/ai/code-gen/CodeGenChat";
+import CodeGenChat from "@/components/ai/code-gen/CodeGenChat";
 
 const CodeGenPage = () => {
   return (

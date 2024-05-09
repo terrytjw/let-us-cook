@@ -1,22 +1,16 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import {
-  Code,
-  Image,
-  MessageCircleMore,
-  Newspaper,
-  Lightbulb,
-} from "lucide-react";
 import React from "react";
+import { cn } from "@/lib/utils";
+
 import { Separator } from "@/components/ui/separator";
-import { Icons } from "@/components/Icons";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Icons } from "@/components/Icons";
 
 type SectionProps = {
   children: React.ReactNode;
@@ -25,7 +19,7 @@ type SectionProps = {
   title?: string;
   separator?: boolean;
 };
-export const Section = ({
+const Section = ({
   children,
   className,
   size = "md",
@@ -36,19 +30,19 @@ export const Section = ({
   switch (title) {
     case "Images":
       // eslint-disable-next-line jsx-a11y/alt-text
-      icon = <Image size={18} className="mr-2" />;
+      icon = <Icons.media size={18} className="mr-2" />;
       break;
     case "Sources":
-      icon = <Newspaper size={18} className="mr-2" />;
+      icon = <Icons.newspaper size={18} className="mr-2" />;
       break;
     case "Code":
-      icon = <Code size={18} className="mr-2" />;
+      icon = <Icons.code size={18} className="mr-2" />;
       break;
     case "AI Suggestions":
-      icon = <MessageCircleMore size={18} className="mr-2" />;
+      icon = <Icons.messageCircleMore size={18} className="mr-2" />;
       break;
     case "Custom prompt":
-      icon = <Lightbulb size={18} className="mr-2" />;
+      icon = <Icons.idea size={18} className="mr-2" />;
       break;
     default:
       icon = null;
@@ -97,3 +91,5 @@ export const Section = ({
     </>
   );
 };
+
+export default Section;

@@ -1,8 +1,9 @@
 import { StreamableValue, useUIState } from "ai/rsc";
 import type { AI } from "@/lib/code-gen/actions";
-import { CollapsibleMessage } from "@/components/ai/code-gen/CollapsibleMessage";
 
-export function ChatMessages() {
+import CollapsibleMessage from "@/components/ai/code-gen/CollapsibleMessage";
+
+const ChatMessages = () => {
   const [messages, setMessages] = useUIState<typeof AI>();
 
   return (
@@ -22,4 +23,6 @@ export function ChatMessages() {
       )}
     </>
   );
-}
+};
+
+export default ChatMessages;
