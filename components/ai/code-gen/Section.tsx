@@ -64,7 +64,7 @@ const Section = ({
 
   const poweredByTag = (
     <p
-      className={cn("ml-2 rounded border px-2 py-1 text-sm", {
+      className={cn("ml-2 rounded border px-2 py-1 text-xs", {
         "border-orange-500 bg-orange-500/10 text-orange-500":
           poweredBy === "Llama-3-70b (Groq)",
         "border-yellow-600 bg-yellow-600/10 text-yellow-600":

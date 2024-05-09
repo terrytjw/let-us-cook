@@ -163,7 +163,7 @@ const Copilot = ({ inquiry }: CopilotProps) => {
           </div>
         )}
         <div className="flex">
-          <p className="mr-auto h-fit rounded border border-green-500 bg-green-500/10 px-2 py-1 text-sm text-green-500">
+          <p className="mr-auto h-fit rounded border border-green-500 bg-green-500/10 px-2 py-1 text-xs text-green-500">
             Powered by GPT-4-turbo
           </p>
           <div className="flex gap-x-2">
