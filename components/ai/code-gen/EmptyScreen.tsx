@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/Icons";
 
-const boiletplatePrompts = [
+const boilerplatePrompts = [
   {
     heading: "Build a Web3 OnlyFans",
     message: "Build a Web3 OnlyFans",
@@ -33,7 +33,7 @@ const EmptyScreen = ({ submitMessage, className }: EmptyScreenProps) => {
     <div className={`mx-auto w-full transition-all ${className}`}>
       <div className="bg-background p-2">
         <div className="mb-4 mt-4 flex flex-col items-start gap-y-2">
-          {boiletplatePrompts.map((prompts, index) => (
+          {boilerplatePrompts.map((prompts, index) => (
             <Button
               key={index}
               variant="link"

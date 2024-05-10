@@ -1,5 +1,3 @@
-"use client";
-
 import ChatMessages from "@/components/ai/code-gen/ChatMessages";
 import ChatPanel from "@/components/ai/code-gen/ChatPanel";
 

@@ -1,3 +1,5 @@
+"use client";
+
 import { StreamableValue, useUIState } from "ai/rsc";
 import type { AI } from "@/lib/code-gen/actions";
 

@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState, useRef } from "react";
 import type { AI } from "@/lib/code-gen/actions";
 import { useUIState, useActions, useAIState } from "ai/rsc";
@@ -120,7 +122,9 @@ const ChatPanel = () => {
       }
     >
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Solidity Code Cooker</h1>
+        <h1 className="text-3xl font-bold text-primary">
+          Solidity Code Cooker
+        </h1>
       </div>
       <p className="mb-4 mt-2 text-sm text-muted-foreground">
         Find related code in{" "}

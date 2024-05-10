@@ -127,7 +127,7 @@ export const writer = async (
 
       // case "tool-result":
       //   if (toolResponses.length === 0) {
-      //     uiStream.append(answerSection);
+      //     uiStream.append(codeSection);
       //   }
       //   toolResponses.push(delta);
       //   break;

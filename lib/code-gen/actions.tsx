@@ -72,7 +72,6 @@ async function submitUserInput(formData?: FormData, skip?: boolean) {
 
     //  Generate the code
     let code = "";
-    let explanation = "";
     let toolOutputs = [];
     let errorOccurred = false;
     const codeStream = createStreamableValue<string>();
@@ -90,9 +89,12 @@ async function submitUserInput(formData?: FormData, skip?: boolean) {
       code = fullResponse;
       toolOutputs = toolResponses;
       errorOccurred = hasError;
+    }
 
-      uiStream.update(<Spinner message="Cooking up some explanation..." />);
+    uiStream.update(<Spinner message="Cooking up some explanation..." />);
 
+    let explanation = "";
+    while (explanation.length === 0) {
       const { fullExplanation, hasExplanationError } = await explainer(
         uiStream,
         explanationStream,
