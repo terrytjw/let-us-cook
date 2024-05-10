@@ -15,8 +15,7 @@ const groq = createOpenAI({
   apiKey: process.env.GROQ_API_KEY || "",
 });
 
-const SYS_TEMPLATE = `You are a helpful AI assistant. All responses must be concise.
-`;
+const SYS_TEMPLATE = `You are a helpful AI assistant. Be detailed and always provide actionable steps if possible. If you are unable to provide a solution, provide a detailed explanation of why you are unable to do so.`;
 
 /**
  * This handler initializes and calls a simple chain with a prompt,

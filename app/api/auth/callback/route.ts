@@ -23,12 +23,12 @@ export const GET = async (request: Request) => {
       .from(users)
       .where(eq(users.email, user?.email || ""));
 
-    console.log("User from DB -> ", userFromDB[0]);
+    console.info("User from DB: ", userFromDB[0]);
 
     if (userFromDB[0]) {
-      console.log("User exists in db");
+      console.info("User exists in db");
     } else {
-      console.log("User does not exist in db. Adding new user to db...");
+      console.info("User does not exist in db. Adding new user to db...");
       const { data } = await supabase.auth.getUserIdentities();
 
       const userId = user!.id;
@@ -41,7 +41,7 @@ export const GET = async (request: Request) => {
         email: userEmail,
       });
 
-      console.log("User added to db");
+      console.info("User added to db");
     }
 
     if (!error) {

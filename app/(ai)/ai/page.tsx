@@ -12,17 +12,28 @@ import {
 
 const aiPages = [
   {
+    id: "gen-ui",
+    name: "Generative UI",
+    description: "UI streaming in action",
+    href: "/ai/gen-ui",
+  },
+  {
+    id: "code-gen",
+    name: "Code Generator",
+    description: "Stream contracts with AI",
+    href: "/ai/code-gen",
+  },
+  {
     id: "chat-ai",
     name: "Chat with AI",
-    description: "Talk to a helpful AI assistant",
+    description: "Talk to a helpful Vercel-powered AI assistant",
     href: "/ai/chat",
   },
   {
-    id: "rag",
-    name: "Retrieval Augmented Generation",
-    description: "Enhance text with retrieval",
-    // href: "/ai/rag",
-    href: "/ai/#", // turn on when ready
+    id: "chat-ai-legacy",
+    name: "Chat with AI (Legacy)",
+    description: "Talk to a helpful Langchain-powered AI assistant",
+    href: "/ai/chat-legacy",
   },
   {
     id: "ai-agent",
@@ -31,16 +42,11 @@ const aiPages = [
     href: "/ai/agent",
   },
   {
-    id: "gen-ui",
-    name: "Generative UI",
-    description: "UI streaming in action",
-    href: "/ai/gen-ui",
-  },
-  {
-    id: "chat-ai-legacy",
-    name: "Chat with AI (Legacy)",
-    description: "Talk to a helpful AI assistant",
-    href: "/ai/chat-legacy",
+    id: "rag",
+    name: "Retrieval Augmented Generation",
+    description: "Enhance text with retrieval (currently unavailable)",
+    // href: "/ai/rag",
+    href: "/ai/#", // turn on when ready
   },
 ];
 

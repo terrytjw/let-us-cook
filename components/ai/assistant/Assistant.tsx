@@ -37,8 +37,6 @@ export const Assistant = ({ firstMessage, threadId }: AssistantProps) => {
     api: "/api/assistants-api",
     threadId,
   });
-  console.log("messages -> ", messages);
-  console.log("asst status -> ", status);
 
   useEffect(() => {
     if (isNewAsstThread === "true") {

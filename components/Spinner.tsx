@@ -6,8 +6,8 @@ type SpinnerProps = {
 const Spinner = ({ message }: SpinnerProps) => {
   return (
     <div className="flex items-center gap-2">
-      <Icons.loading className="h-4 w-4 animate-spin" />
-      {message}
+      <Icons.cook className="h-4 w-4 animate-spin" />
+      <p className="text-sm">{message}</p>
     </div>
   );
 };
