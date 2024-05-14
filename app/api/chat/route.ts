@@ -48,6 +48,8 @@ export const POST = async (req: NextRequest) => {
 
     const stream = result.toAIStream();
 
+    // decrementAIMessage(user.id);
+
     return new StreamingTextResponse(stream);
   } catch (error: any) {
     return NextResponse.json(

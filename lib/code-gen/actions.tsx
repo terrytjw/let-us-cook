@@ -17,9 +17,20 @@ import {
 import Spinner from "@/components/Spinner";
 import Section from "@/components/ai/code-gen/Section";
 import FollowupPanel from "@/components/ai/code-gen/FollowupPanel";
+import { getCurrentUser } from "@/lib/user";
+import { decrementCredits } from "@/lib/server/decrement-credits";
 
 async function submitUserInput(formData?: FormData, skip?: boolean) {
   "use server";
+
+  // get current user id and decrement ai message left
+  const { user } = await getCurrentUser();
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  await decrementCredits(user.id);
 
   const aiState = getMutableAIState<typeof AI>();
   const uiStream = createStreamableUI();
@@ -46,6 +57,7 @@ async function submitUserInput(formData?: FormData, skip?: boolean) {
     aiState.update([...(aiState.get() as any), message]);
   }
 
+  let errorOccurred = false;
   async function processEvents() {
     let action: any = { object: { next: "proceed" } };
     // If the user skips the task, we proceed to the search
@@ -73,7 +85,6 @@ async function submitUserInput(formData?: FormData, skip?: boolean) {
     //  Generate the code
     let code = "";
     let toolOutputs = [];
-    let errorOccurred = false;
     const codeStream = createStreamableValue<string>();
     const explanationStream = createStreamableValue<string>();
 
@@ -132,6 +143,7 @@ async function submitUserInput(formData?: FormData, skip?: boolean) {
     isGenerating: isGenerating.value,
     component: uiStream.value,
     isCollapsed: isCollapsed.value,
+    errorOccurred: errorOccurred,
   };
 }
 
