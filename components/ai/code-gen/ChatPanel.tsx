@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import type { AI } from "@/lib/code-gen/actions";
 import { useUIState, useActions, useAIState } from "ai/rsc";
 import { cn } from "@/lib/utils";
@@ -12,6 +13,8 @@ import EmptyScreen from "@/components/ai/code-gen/EmptyScreen";
 import { Icons } from "@/components/Icons";
 
 const ChatPanel = () => {
+  const queryClient = useQueryClient();
+
   const [messages, setMessages] = useUIState<typeof AI>();
   const [aiMessages, setAiMessages] = useAIState<typeof AI>();
   const { submitUserInput } = useActions<typeof AI>();
@@ -43,12 +46,18 @@ const ChatPanel = () => {
     // Submit and get response message
     const formData = new FormData(e.currentTarget);
     const responseMessage = await submitUserInput(formData);
+
+    if (responseMessage.errorOccurred) {
+      console.error("Error occurred during GenUI process.");
+    }
+
     setMessages((currentMessages) => [
       ...currentMessages,
       responseMessage as any,
     ]);
 
     setInput("");
+    queryClient.invalidateQueries({ queryKey: ["ai-credits"] });
   };
 
   // Clear messages
@@ -95,7 +104,7 @@ const ChatPanel = () => {
   // If there are messages and the "New" button has not been pressed, display the New Button
   if (messages.length > 0 && !isNewButtonPressed) {
     return (
-      <div className="pointer-events-none fixed bottom-2 left-0 right-0 mx-auto flex items-center justify-center md:bottom-8">
+      <div className="pointer-events-none fixed bottom-2 left-0 right-0 z-20 mx-auto flex items-center justify-center md:bottom-8">
         <Button
           type="button"
           variant={"secondary"}

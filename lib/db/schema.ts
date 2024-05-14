@@ -1,9 +1,18 @@
-import { pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  serial,
+  text,
+  timestamp,
+  boolean,
+  integer,
+} from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
   id: text("id").primaryKey(),
   fullName: text("fullName").notNull(),
   email: text("email").notNull(),
+  isAdmin: boolean("isAdmin").notNull().default(false),
+  aiMessagesLeft: integer("aiMessagesLeft").notNull().default(50),
   createdAt: timestamp("createdAt", { mode: "date" }).notNull().defaultNow(),
 });
 

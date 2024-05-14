@@ -25,20 +25,20 @@ const aiPages = [
   },
   {
     id: "chat-ai",
-    name: "Chat with AI",
+    name: "Vercel Chat",
     description: "Talk to a helpful Vercel-powered AI assistant",
     href: "/ai/chat",
   },
   {
     id: "chat-ai-legacy",
-    name: "Chat with AI (Legacy)",
+    name: "LangChain Chat",
     description: "Talk to a helpful Langchain-powered AI assistant",
     href: "/ai/chat-legacy",
   },
   {
     id: "ai-agent",
     name: "AI Agent",
-    description: "Interact with an AI agent",
+    description: "Interact with an AI agent (Powered by OpenAI Assistants API)",
     href: "/ai/agent",
   },
   {
@@ -60,6 +60,9 @@ const AIPage = async () => {
   return (
     <main className="flex flex-col justify-center p-6">
       <h1 className="text-4xl font-bold">Let's cook up some AI.</h1>
+      <h3 className="mt-2 text-muted-foreground">
+        You will need OpenAI, Anthropic & Groq API keys to use these tools.
+      </h3>
       <section className="py-4">
         <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2">
           {aiPages.map((page) => (

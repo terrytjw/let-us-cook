@@ -1,12 +1,16 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/user";
-import { AI } from "@/lib/gen-ui/actions";
 
 import Footer from "@/components/navigation/Footer";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import LogoutButton from "@/components/LogoutButton";
+import AIMessagesLeft from "@/components/ai/AIMessagesLeft";
+
+import { db } from "@/lib/db";
+import { users } from "@/lib/db/schema";
+import { eq } from "drizzle-orm";
 
 type AILayoutProps = {
   children?: React.ReactNode;
@@ -23,7 +27,7 @@ const AILayout = async ({ children }: AILayoutProps) => {
   } = user;
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="relative flex min-h-screen flex-col">
       {/* <header className="sticky top-0 z-40 border-b bg-background">
         <div className="container flex h-16 items-center justify-between py-4">
           <MainNav items={dashboardConfig.mainNav} />
@@ -36,7 +40,7 @@ const AILayout = async ({ children }: AILayoutProps) => {
           />
         </div>
       </header> */}
-      <header className="flex items-center justify-between p-6">
+      <header className="z-10 flex items-center justify-between p-6">
         <div>
           <h1 className="text-xl">
             Welcome,{" "}
@@ -61,11 +65,10 @@ const AILayout = async ({ children }: AILayoutProps) => {
 
       <Separator />
 
-      <AI>
-        <main className="flex-1">{children}</main>
-      </AI>
+      <main className="relative flex-1">{children}</main>
+      <AIMessagesLeft />
 
-      <Footer />
+      <Footer className="z-10" />
     </div>
   );
 };
