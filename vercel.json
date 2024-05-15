@@ -1,6 +1,6 @@
 {
   "functions": {
-    "lib/code-gen/actions.tsx": {
+    "@lib/code-gen/actions.tsx": {
       "maxDuration": 60
     }
   }
