@@ -1,6 +1,6 @@
 {
   "functions": {
-    "/ai/code-gen": {
+    "app/ai/code-gen": {
       "maxDuration": 60
     }
   }
