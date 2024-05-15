@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "lib/code-gen/actions.tsx": {
+      "maxDuration": 60
+    }
+  }
+}

@@ -33,7 +33,7 @@ const AICredits = () => {
         </TooltipTrigger>
         <TooltipContent className="w-64 border border-primary p-4 font-medium">
           <p>
-            Each user is only entitled to 50 messages per month. If you need
+            Each user is only entitled to 30 messages per month. If you need
             more, please contact us.
           </p>
         </TooltipContent>
