@@ -50,7 +50,7 @@ export async function inquire(
 
   let finalInquiry: PartialInquiry = {};
   await streamObject({
-    model: openai(AI_MODELS.OPENAI.GPT_4),
+    model: openai(AI_MODELS.OPENAI.GPT_4_O),
     system: CODE_SYS_INSTRUCTIONS,
     messages,
     schema: inquirySchema,

@@ -18,6 +18,9 @@ const AgentPage = () => {
             /api/assistants-api/...
           </span>
         </p>
+        <p className="mt-2 text-muted-foreground">
+          This only works on local host as you need your own Assistant ID.
+        </p>
         <AsstThreadList />
       </section>
       <div>

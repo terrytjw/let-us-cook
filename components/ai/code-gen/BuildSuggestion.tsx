@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { useActions, useStreamableValue, useUIState } from "ai/rsc";
 import { AI } from "@/lib/code-gen/actions";
 import { PartialSuggestions } from "@/validations/code-gen/suggestions";
@@ -20,6 +21,8 @@ type BuildSuggestionProps = {
   aiSuggestions: PartialSuggestions;
 };
 const BuildSuggestion = ({ aiSuggestions }: BuildSuggestionProps) => {
+  const queryClient = useQueryClient();
+
   const { submitUserInput } = useActions<typeof AI>();
   const [, setMessages] = useUIState<typeof AI>();
   const [data, error, pending] =
@@ -44,11 +47,17 @@ const BuildSuggestion = ({ aiSuggestions }: BuildSuggestionProps) => {
     };
 
     const responseMessage = await submitUserInput(formData);
+    if (responseMessage.errorOccurred) {
+      console.error("Error occurred during GenUI process.");
+    }
+
     setMessages((currentMessages) => [
       ...currentMessages,
       userMessage,
       responseMessage,
     ]);
+
+    queryClient.invalidateQueries({ queryKey: ["ai-credits"] });
   };
 
   if (pending && !data) {

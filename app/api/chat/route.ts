@@ -2,20 +2,23 @@ import { NextRequest, NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/user";
 import { ChatPostSchema } from "@/validations/chat";
 import { formatMessage } from "@/lib/utils";
+import { decrementCredits } from "@/lib/server/decrement-credits";
 
 import { AI_MODELS } from "@/lib/constants";
 import { StreamingTextResponse, streamText, CoreMessage } from "ai";
 import { openai, createOpenAI } from "@ai-sdk/openai";
 import { anthropic } from "@ai-sdk/anthropic";
 
-export const runtime = "edge";
+// ensure no caching and latest data is always fetched and rendered. important as Chat route requires real-time update
+export const dynamic = "force-dynamic";
+// 'auto' | 'force-dynamic' | 'error' | 'force-static'
 
 const groq = createOpenAI({
   baseURL: "https://api.groq.com/openai/v1",
   apiKey: process.env.GROQ_API_KEY || "",
 });
 
-const SYS_TEMPLATE = `You are a helpful AI assistant. Be detailed and always provide actionable steps if possible. If you are unable to provide a solution, provide a detailed explanation of why you are unable to do so.`;
+const SYS_TEMPLATE = `You are a helpful AI assistant. Be concise and always provide actionable responses.`;
 
 /**
  * This handler initializes and calls a simple chain with a prompt,
@@ -37,9 +40,9 @@ export const POST = async (req: NextRequest) => {
     const currentMessageContent = messages[messages.length - 1].content;
 
     const result = await streamText({
-      //   model: openai(AI_MODELS.OPENAI.GPT_4),
+      model: openai(AI_MODELS.OPENAI.GPT_4_O),
       //   model: anthropic(AI_MODELS.ANTHROPIC.HAIKU),
-      model: groq(AI_MODELS.GROQ.LLAMA3_70B),
+      // model: groq(AI_MODELS.GROQ.LLAMA3_70B),
       system: SYS_TEMPLATE, // system prompt
       messages: messages, // conversation history
       temperature: 0.7, // temperature
@@ -47,6 +50,8 @@ export const POST = async (req: NextRequest) => {
     });
 
     const stream = result.toAIStream();
+
+    await decrementCredits(user.id);
 
     return new StreamingTextResponse(stream);
   } catch (error: any) {

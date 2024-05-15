@@ -18,6 +18,8 @@ import {
   BotMessage,
   SpinnerMessage,
 } from "@/components/ai/gen-ui/GenUIMessage";
+import { getCurrentUser } from "../user";
+import { decrementCredits } from "../server/decrement-credits";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY || "",
@@ -84,6 +86,12 @@ async function submitUserMessage(
   userInput: string,
 ): Promise<SubmitUserMessageReturn> {
   "use server";
+
+  const { user } = await getCurrentUser();
+
+  if (!user) {
+    throw new Error("User not found");
+  }
 
   const aiState = getMutableAIState<typeof AI>();
 
@@ -220,7 +228,7 @@ async function submitUserMessage(
   // `render()` creates a generated, streamable UI.
   // TODO: `render()` is deprecated, replace to experimental_streamUI when the new docs (https://sdk.vercel.ai/docs/ai-core) are ready
   const ui = render({
-    model: AI_MODELS.OPENAI.GPT_4, // GPT_3 is not very accurate at invoking the right tools
+    model: AI_MODELS.OPENAI.GPT_4_O, // GPT_3 is not very accurate at invoking the right tools
     provider: openai,
     temperature: 0.3, // we want the flight assistant's responses to be somewhat the same for similar user input
     initial: <SpinnerMessage message="Assistant is thinking..." />,
@@ -260,6 +268,8 @@ async function submitUserMessage(
     // `tools` is an object that defines a set of functions that can be called by the AI model to perform specific tasks
     tools: flightTools,
   });
+
+  await decrementCredits(user.id);
 
   return {
     id: Date.now(),

@@ -15,6 +15,7 @@ export const AI_MODELS = {
   OPENAI: {
     GPT_3: "gpt-3.5-turbo",
     GPT_4: "gpt-4-turbo",
+    GPT_4_O: "gpt-4o",
   },
   // https://api.together.xyz/models
   TOGETHER: {

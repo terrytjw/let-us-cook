@@ -13,6 +13,8 @@ import {
   explainer,
   aiSuggestor,
 } from "@/lib/code-gen/agents";
+import { getCurrentUser } from "@/lib/user";
+import { decrementCredits } from "@/lib/server/decrement-credits";
 
 import Spinner from "@/components/Spinner";
 import Section from "@/components/ai/code-gen/Section";
@@ -20,6 +22,12 @@ import FollowupPanel from "@/components/ai/code-gen/FollowupPanel";
 
 async function submitUserInput(formData?: FormData, skip?: boolean) {
   "use server";
+
+  const { user } = await getCurrentUser();
+
+  if (!user) {
+    throw new Error("User not found");
+  }
 
   const aiState = getMutableAIState<typeof AI>();
   const uiStream = createStreamableUI();
@@ -46,7 +54,8 @@ async function submitUserInput(formData?: FormData, skip?: boolean) {
     aiState.update([...(aiState.get() as any), message]);
   }
 
-  async function processEvents() {
+  let errorOccurred = false;
+  async function processEvents(userId: string) {
     let action: any = { object: { next: "proceed" } };
     // If the user skips the task, we proceed to the search
     if (!skip) {
@@ -56,6 +65,8 @@ async function submitUserInput(formData?: FormData, skip?: boolean) {
     if (action.object.next === "inquire") {
       // Generate inquiry
       const inquiry = await inquire(uiStream, messages);
+
+      await decrementCredits(userId);
 
       uiStream.done();
       isGenerating.done();
@@ -86,6 +97,9 @@ async function submitUserInput(formData?: FormData, skip?: boolean) {
         codeStream,
         messages,
       );
+
+      await decrementCredits(userId);
+
       code = fullResponse;
       toolOutputs = toolResponses;
       errorOccurred = hasError;
@@ -101,6 +115,9 @@ async function submitUserInput(formData?: FormData, skip?: boolean) {
         messages,
         code,
       );
+
+      await decrementCredits(userId);
+
       explanation = fullExplanation;
       errorOccurred = hasExplanationError;
     }
@@ -108,6 +125,8 @@ async function submitUserInput(formData?: FormData, skip?: boolean) {
     if (!errorOccurred) {
       // Generate related queries
       await aiSuggestor(uiStream, messages);
+
+      await decrementCredits(userId);
 
       // Add follow-up panel
       uiStream.append(
@@ -125,13 +144,14 @@ async function submitUserInput(formData?: FormData, skip?: boolean) {
     ]);
   }
 
-  processEvents();
+  processEvents(user.id);
 
   return {
     id: Date.now(),
     isGenerating: isGenerating.value,
     component: uiStream.value,
     isCollapsed: isCollapsed.value,
+    errorOccurred: errorOccurred,
   };
 }
 

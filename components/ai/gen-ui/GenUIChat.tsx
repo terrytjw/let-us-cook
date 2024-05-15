@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useUIState, useActions, useAIState } from "ai/rsc";
 import { useEnterSubmit } from "@/hooks/useEnterSubmit";
 import type { AI } from "@/lib/gen-ui/actions";
+import { useQueryClient } from "@tanstack/react-query";
 
 import { Icons } from "@/components/Icons";
 import { Button } from "@/components/ui/button";
@@ -11,8 +12,9 @@ import { Separator } from "@/components/ui/separator";
 import { UserMessage } from "@/components/ai/gen-ui/GenUIMessage";
 import Textarea from "react-textarea-autosize";
 
-// type GenUIChatProps = {};
 const GenUIChat = () => {
+  const queryClient = useQueryClient();
+
   const [inputValue, setInputValue] = useState("");
   const { formRef, onKeyDown } = useEnterSubmit();
   const [lastAsstMessageId, setLastAsstMessageId] = useState("");
@@ -77,6 +79,8 @@ const GenUIChat = () => {
             ...currentMessages,
             responseMessage,
           ]);
+
+          queryClient.invalidateQueries({ queryKey: ["ai-credits"] });
         }}
       >
         <div className="relative">

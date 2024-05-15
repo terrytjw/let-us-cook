@@ -30,16 +30,18 @@ const aiPages = [
     href: "/ai/chat",
   },
   {
-    id: "chat-ai-legacy",
-    name: "Chat with AI (Legacy)",
-    description: "Talk to a helpful Langchain-powered AI assistant",
-    href: "/ai/chat-legacy",
-  },
-  {
     id: "ai-agent",
     name: "AI Agent",
     description: "Interact with an AI agent",
     href: "/ai/agent",
+  },
+  {
+    id: "chat-ai-legacy",
+    name: "Chat with AI (Legacy)",
+    description:
+      "Talk to a helpful Langchain-powered AI assistant (currently unavailable)",
+    // href: "/ai/chat-legacy",
+    href: "/ai/#", // turn on when ready
   },
   {
     id: "rag",
