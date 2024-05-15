@@ -103,6 +103,8 @@ async function submitUserInput(formData?: FormData, skip?: boolean) {
       code = fullResponse;
       toolOutputs = toolResponses;
       errorOccurred = hasError;
+
+      await new Promise((resolve) => setTimeout(resolve, 500));
     }
 
     uiStream.update(<Spinner message="Cooking up some explanation..." />);
@@ -120,6 +122,8 @@ async function submitUserInput(formData?: FormData, skip?: boolean) {
 
       explanation = fullExplanation;
       errorOccurred = hasExplanationError;
+
+      await new Promise((resolve) => setTimeout(resolve, 500));
     }
 
     if (!errorOccurred) {
