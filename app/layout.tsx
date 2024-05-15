@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
 import { cn } from "@/lib/utils";
 import "@/styles/globals.css";
 
@@ -35,6 +36,7 @@ export default function RootLayout({
             <Toaster />
           </ThemeProvider>
         </Providers>
+        <Analytics />
       </body>
     </html>
   );
