@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "lib/*.tsx": {
+      "maxDuration": 15
+    }
+  }
+}

@@ -20,9 +20,6 @@ import Spinner from "@/components/Spinner";
 import Section from "@/components/ai/code-gen/Section";
 import FollowupPanel from "@/components/ai/code-gen/FollowupPanel";
 
-export const maxDuration = 60; // This function can run for a maximum of 60 seconds
-export const dynamic = "force-dynamic";
-
 async function submitUserInput(formData?: FormData, skip?: boolean) {
   "use server";
 
