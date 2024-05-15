@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { useActions, useStreamableValue, useUIState } from "ai/rsc";
 import { AI } from "@/lib/code-gen/actions";
 import { PartialInquiry } from "@/validations/code-gen/inquire";
@@ -16,6 +17,8 @@ type CopilotProps = {
   inquiry?: PartialInquiry;
 };
 const Copilot = ({ inquiry }: CopilotProps) => {
+  const queryClient = useQueryClient();
+
   const [completed, setCompleted] = useState(false);
   const [query, setQuery] = useState("");
   const [skipped, setSkipped] = useState(false);
@@ -72,7 +75,14 @@ const Copilot = ({ inquiry }: CopilotProps) => {
       : new FormData(e.target as HTMLFormElement);
 
     const responseMessage = await submitUserInput(formData, skip);
+
+    if (responseMessage.errorOccurred) {
+      console.error("Error occurred during GenUI process.");
+    }
+
     setMessages((currentMessages) => [...currentMessages, responseMessage]);
+
+    queryClient.invalidateQueries({ queryKey: ["ai-credits"] });
   };
 
   const handleSkip = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -164,7 +174,7 @@ const Copilot = ({ inquiry }: CopilotProps) => {
         )}
         <div className="flex">
           <p className="mr-auto h-fit rounded border border-green-500 bg-green-500/10 px-2 py-1 text-xs text-green-500">
-            Powered by GPT-4-turbo
+            Powered by GPT-4o
           </p>
           <div className="flex gap-x-2">
             <Button

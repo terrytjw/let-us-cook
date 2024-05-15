@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { useActions, useUIState } from "ai/rsc";
 import { AI } from "@/lib/code-gen/actions";
 
@@ -10,6 +11,8 @@ import UserMessage from "@/components/ai/code-gen/UserMessage";
 import { Icons } from "@/components/Icons";
 
 const FollowupPanel = () => {
+  const queryClient = useQueryClient();
+
   const [input, setInput] = useState("");
   const { submitUserInput } = useActions<typeof AI>();
   const [, setMessages] = useUIState<typeof AI>();
@@ -25,6 +28,11 @@ const FollowupPanel = () => {
     };
 
     const responseMessage = await submitUserInput(formData);
+
+    if (responseMessage.errorOccurred) {
+      console.error("Error occurred during GenUI process.");
+    }
+
     setMessages((currentMessages) => [
       ...currentMessages,
       userMessage,
@@ -32,6 +40,7 @@ const FollowupPanel = () => {
     ]);
 
     setInput("");
+    queryClient.invalidateQueries({ queryKey: ["ai-credits"] });
   };
 
   return (

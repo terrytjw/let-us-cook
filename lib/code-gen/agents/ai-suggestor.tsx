@@ -46,7 +46,7 @@ export async function aiSuggestor(
   );
 
   await streamObject({
-    model: openai(AI_MODELS.OPENAI.GPT_4),
+    model: openai(AI_MODELS.OPENAI.GPT_4_O),
     system: CODE_SYS_INSTRUCTIONS,
     messages,
     schema: suggestionsSchema,

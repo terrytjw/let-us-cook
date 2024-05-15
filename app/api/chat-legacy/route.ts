@@ -60,10 +60,10 @@ export const POST = async (req: NextRequest) => {
     // });
 
     // Groq
-    // const model = new ChatGroq({
-    //   model: AI_MODELS.GROQ.MIXTRAL_8X7B,
-    //   temperature: 0.8,
-    // });
+    const model = new ChatGroq({
+      model: AI_MODELS.GROQ.MIXTRAL_8X7B,
+      temperature: 0.8,
+    });
 
     // Ollama (local)
     // const model = new ChatOllama({
@@ -72,10 +72,10 @@ export const POST = async (req: NextRequest) => {
     // });
 
     // OpenAI
-    const model = new ChatOpenAI({
-      model: AI_MODELS.OPENAI.GPT_3,
-      temperature: 0.8,
-    });
+    // const model = new ChatOpenAI({
+    //   model: AI_MODELS.OPENAI.GPT_3,
+    //   temperature: 0.8,
+    // });
 
     // TogetherAI (currently buggy, do not use)
     // const model = new ChatTogetherAI({
