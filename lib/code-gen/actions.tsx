@@ -75,6 +75,7 @@ async function submitUserInput(formData?: FormData, skip?: boolean) {
         ...aiState.get(),
         { role: "assistant", content: `inquiry: ${inquiry?.question}` },
       ]);
+
       return;
     }
 
@@ -86,7 +87,6 @@ async function submitUserInput(formData?: FormData, skip?: boolean) {
     let toolOutputs = [];
     let errorOccurred = false;
     const codeStream = createStreamableValue<string>();
-    const explanationStream = createStreamableValue<string>();
 
     uiStream.update(<Spinner message="Cooking up some kickass code..." />);
 
@@ -103,13 +103,13 @@ async function submitUserInput(formData?: FormData, skip?: boolean) {
       code = fullResponse;
       toolOutputs = toolResponses;
       errorOccurred = hasError;
-
-      await new Promise((resolve) => setTimeout(resolve, 500));
     }
 
+    codeStream.done();
     uiStream.update(<Spinner message="Cooking up some explanation..." />);
 
     let explanation = "";
+    const explanationStream = createStreamableValue<string>();
     while (explanation.length === 0) {
       const { fullExplanation, hasExplanationError } = await explainer(
         uiStream,
@@ -122,9 +122,9 @@ async function submitUserInput(formData?: FormData, skip?: boolean) {
 
       explanation = fullExplanation;
       errorOccurred = hasExplanationError;
-
-      await new Promise((resolve) => setTimeout(resolve, 500));
     }
+
+    explanationStream.done();
 
     if (!errorOccurred) {
       // Generate related queries
@@ -139,10 +139,6 @@ async function submitUserInput(formData?: FormData, skip?: boolean) {
         </Section>,
       );
     }
-
-    // Add the answer, related queries, and follow-up panel to the state
-    // Wait for 0.5 second before adding the answer to the state
-    await new Promise((resolve) => setTimeout(resolve, 500));
 
     isGenerating.done(false);
     uiStream.done();
