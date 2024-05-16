@@ -41,17 +41,17 @@ const Section = ({
 
     case "Code":
       icon = <Icons.code size={18} className="mr-2" />;
-      poweredBy = "Llama-3-70b (Groq)";
+      // poweredBy = "GPT-4 Omni";
       break;
 
     case "Explanation":
       icon = <Icons.bookOpen size={18} className="mr-2" />;
-      poweredBy = "Claude Haiku";
+      // poweredBy = "Llama-3-70b (Groq)";
       break;
 
     case "AI Suggestions":
       icon = <Icons.messageCircleMore size={18} className="mr-2" />;
-      poweredBy = "GPT-4o";
+      // poweredBy = "GPT-4 Omni";
       break;
 
     case "Custom prompt":
@@ -70,7 +70,7 @@ const Section = ({
         "border-yellow-600 bg-yellow-600/10 text-yellow-600":
           poweredBy === "Claude Haiku",
         "border-green-500 bg-green-500/10 text-green-500":
-          poweredBy === "GPT-4o",
+          poweredBy === "GPT-4 Omni",
       })}
     >
       Powered by {poweredBy}

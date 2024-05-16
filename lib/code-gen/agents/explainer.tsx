@@ -6,6 +6,7 @@ import { AI_MODELS } from "@/lib/constants";
 
 import Section from "@/components/ai/code-gen/Section";
 import BotMessage from "@/components/ai/code-gen/Message";
+import Spinner from "@/components/Spinner";
 
 const groq = createOpenAI({
   baseURL: "https://api.groq.com/openai/v1",
@@ -34,8 +35,8 @@ export const explainer = async (
   );
 
   const result = await streamText({
-    // model: openai(AI_MODELS.OPENAI.GPT_3),
-    model: anthropic(AI_MODELS.ANTHROPIC.HAIKU),
+    model: openai(AI_MODELS.OPENAI.GPT_4_O),
+    // model: anthropic(AI_MODELS.ANTHROPIC.HAIKU),
     // model: groq(AI_MODELS.GROQ.LLAMA3_70B),
     system: CODE_SYS_INSTRUCTIONS,
     messages,
@@ -50,6 +51,12 @@ export const explainer = async (
           if (fullExplanation.length === 0 && delta.textDelta.length > 0) {
             // Updates the current UI node. It takes a new UI node and replaces the old one.
             uiStream.update(explanationSection);
+
+            uiStream.append(
+              <div className="mt-2 flex justify-end">
+                <Spinner message="Generating explanation..." />
+              </div>,
+            );
           }
 
           fullExplanation += delta.textDelta;
@@ -63,6 +70,8 @@ export const explainer = async (
         break;
     }
   }
+
+  uiStream.update(null);
 
   messages.push({
     role: "assistant",

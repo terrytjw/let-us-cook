@@ -59,7 +59,7 @@ const AssistantAction = () => {
     <main>
       <Dialog>
         <DialogTrigger asChild>
-          <Button>+ New Thread</Button>
+          <Button disabled>+ New Thread</Button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>

@@ -120,7 +120,11 @@ async function submitUserMessage(
         .required(),
       render: async function* ({ flightNumber }: { flightNumber: string }) {
         // Show a spinner on the client while we wait for the response.
-        yield <SpinnerMessage message="Loading flight information..." />;
+        yield (
+          <div className="text-muted-foreground">
+            <SpinnerMessage message="Loading flight information..." />
+          </div>
+        );
 
         // Fetch the flight information from an external API.
         const flightInfo = await getFlightInfo(flightNumber);
@@ -165,13 +169,21 @@ async function submitUserMessage(
         passengerName: string;
       }) {
         // show a spinner on the client while we wait for the booking process.
-        yield <SpinnerMessage message="Searching flight... please wait." />;
+        yield (
+          <div className="text-muted-foreground">
+            <SpinnerMessage message="Searching flight... please wait." />
+          </div>
+        );
 
         // simulate a delay of 2 seconds to mimic a search flight API call
         // can replace with a real API call
         await new Promise((resolve) => setTimeout(resolve, 2000));
 
-        yield <SpinnerMessage message="Booking flight..." />;
+        yield (
+          <div className="text-muted-foreground">
+            <SpinnerMessage message="Booking flight..." />
+          </div>
+        );
 
         // attempt to book the flight using the provided details.
         const bookingResult = await bookFlight(flightNumber, passengerName);

@@ -25,17 +25,16 @@ const Footer = ({ className }: FooterProps) => {
             >
               Terry Tan
             </Link>
-            .
-            {/*Get the source code on{" "}
+            . View source code on{" "}
             <Link
-              href=""
+              href="https://github.com/terrytjw/let-us-cook"
               target="_blank"
               rel="noreferrer"
               className="font-medium underline underline-offset-4 transition-all duration-700 hover:text-primary"
             >
               GitHub
             </Link>
-            . */}
+            .
           </p>
         </div>
         <ThemeModeToggle />

@@ -1,5 +1,5 @@
 import { CoreMessage, generateObject } from "ai";
-import { createOpenAI } from "@ai-sdk/openai";
+import { createOpenAI, openai } from "@ai-sdk/openai";
 import { nextActionSchema } from "@/validations/code-gen/next-action";
 import { AI_MODELS } from "@/lib/constants";
 
@@ -22,11 +22,12 @@ const groq = createOpenAI({
 export const requirementsManager = async (messages: CoreMessage[]) => {
   try {
     const result = await generateObject({
-      model: groq(AI_MODELS.GROQ.LLAMA3_70B),
+      // model: groq(AI_MODELS.GROQ.LLAMA3_70B),
+      model: openai(AI_MODELS.OPENAI.GPT_4_O),
       system: CODE_SYS_INSTRUCTIONS,
       messages,
       schema: nextActionSchema,
-      temperature: 0.2, // less creative as you want the AI to be deterministic when it comes to deciding whether a kind of prompt is vague or not
+      temperature: 0.1, // less creative as you want the AI to be deterministic when it comes to deciding whether a kind of prompt is vague or not
     });
 
     return result;

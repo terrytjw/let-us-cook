@@ -63,37 +63,37 @@ export const writer = async (
 
   let isFirstToolResponse = true;
   const result = await streamText({
-    // model: openai(AI_MODELS.OPENAI.GPT_3),
+    model: openai(AI_MODELS.OPENAI.GPT_4_O),
     // model: anthropic(AI_MODELS.ANTHROPIC.HAIKU),
-    model: groq(AI_MODELS.GROQ.LLAMA3_70B),
+    // model: groq(AI_MODELS.GROQ.LLAMA3_70B),
     // maxTokens: 2500,
     system: CODE_SYS_INSTRUCTIONS,
     messages,
-    // tools: {
-    //   knowledgeBaseRetrieval: {
-    //     description: "Search the Blink knowledge base for information",
-    //     parameters: kbSearchSchema,
-    //     execute: async ({ query }: { query: string }) => {
-    //       // If this is the first tool response, remove spinner
-    //       if (isFirstToolResponse) {
-    //         isFirstToolResponse = false;
-    //         uiStream.update(null);
-    //       }
+    tools: {
+      knowledgeBaseRetrieval: {
+        description: "Search the Blink knowledge base for information",
+        parameters: kbSearchSchema,
+        execute: async ({ query }: { query: string }) => {
+          // If this is the first tool response, remove spinner
+          if (isFirstToolResponse) {
+            isFirstToolResponse = false;
+            uiStream.update(null);
+          }
 
-    //       uiStream.update(
-    //         <Spinner message="Looking up Blink Knowledge Base..." />,
-    //       );
+          uiStream.update(
+            <Spinner message="Looking up Blink Knowledge Base... (Simulation)" />,
+          );
 
-    //       const res = await blinkSearch(query);
+          const res = await blinkSearch(query);
 
-    //       uiStream.update(
-    //         <ToolCallComplete message="Blink Knowledge Base search complete" />,
-    //       );
+          uiStream.update(
+            <ToolCallComplete message="Blink Knowledge Base search complete" />,
+          );
 
-    //       return res; // stub
-    //     },
-    //   },
-    // },
+          return res; // stub
+        },
+      },
+    },
   });
 
   const toolCalls: ToolCallPart[] = [];
@@ -125,12 +125,12 @@ export const writer = async (
         toolCalls.push(delta);
         break;
 
-      // case "tool-result":
-      //   if (toolResponses.length === 0) {
-      //     uiStream.append(codeSection);
-      //   }
-      //   toolResponses.push(delta);
-      //   break;
+      case "tool-result":
+        if (toolResponses.length === 0) {
+          uiStream.append(codeSection);
+        }
+        toolResponses.push(delta);
+        break;
 
       case "error":
         hasError = true;
