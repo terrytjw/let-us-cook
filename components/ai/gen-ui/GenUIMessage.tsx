@@ -23,9 +23,7 @@ export const UserMessage = ({ children }: UserMessageProps) => {
       <div className="flex size-[25px] shrink-0 select-none items-center justify-center rounded-md border bg-background shadow-sm">
         <Icons.user />
       </div>
-      <div className="ml-4 flex-1 space-y-2 overflow-hidden pl-2">
-        {children}
-      </div>
+      <div className="ml-4 flex-1 space-y-2 overflow-hidden">{children}</div>
     </div>
   );
 };
@@ -42,7 +40,7 @@ export const BotMessage = ({ content, className }: BotMessageProps) => {
       <div className="flex size-[24px] shrink-0 select-none items-center justify-center rounded-md border bg-primary text-primary-foreground shadow-sm">
         <Icons.openai />
       </div>
-      <div className="ml-4 flex-1 space-y-2 overflow-hidden px-1">
+      <div className="ml-4 flex-1 space-y-2 overflow-hidden">
         <MemoizedReactMarkdown
           className="prose dark:prose-invert prose-p:leading-relaxed prose-pre:p-0 break-words"
           remarkPlugins={[remarkGfm, remarkMath]}
@@ -105,7 +103,7 @@ export const BotCard = ({ children, showAvatar = true }: BotCardProps) => {
       >
         <Icons.openai />
       </div>
-      <div className="ml-4 flex-1 pl-2">{children}</div>
+      <div className="ml-4 flex-1">{children}</div>
     </div>
   );
 };
@@ -135,7 +133,9 @@ export const SpinnerMessage = ({ message }: SpinnerMessageProps) => {
         <Icons.openai />
       </div>
 
-      <Spinner message={message} />
+      <div className="ml-2">
+        <Spinner message={message} />
+      </div>
     </div>
   );
 };
