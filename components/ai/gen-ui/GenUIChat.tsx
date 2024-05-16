@@ -5,24 +5,29 @@ import { useUIState, useActions, useAIState } from "ai/rsc";
 import { useEnterSubmit } from "@/hooks/useEnterSubmit";
 import type { AI } from "@/lib/gen-ui/actions";
 import { useQueryClient } from "@tanstack/react-query";
+import { nanoid } from "@/lib/utils";
 
 import { Icons } from "@/components/Icons";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { UserMessage } from "@/components/ai/gen-ui/GenUIMessage";
+import {
+  SpinnerMessage,
+  UserMessage,
+} from "@/components/ai/gen-ui/GenUIMessage";
 import Textarea from "react-textarea-autosize";
 
 const GenUIChat = () => {
   const queryClient = useQueryClient();
 
-  const [inputValue, setInputValue] = useState("");
-  const { formRef, onKeyDown } = useEnterSubmit();
-  const [lastAsstMessageId, setLastAsstMessageId] = useState("");
-  const [isAssistantThinking, setIsAssistantThinking] = useState(false);
-
   const [aiState] = useAIState();
   const [messages, setMessages] = useUIState<typeof AI>();
   const { submitUserMessage } = useActions<typeof AI>();
+
+  const [inputValue, setInputValue] = useState("");
+  const [lastAsstMessageId, setLastAsstMessageId] = useState("");
+  const [isAssistantThinking, setIsAssistantThinking] = useState(false);
+
+  const { formRef, onKeyDown } = useEnterSubmit();
 
   // aiState only changes after a stream is completed
   // so we can use it to determine when the assistant is done thinking
@@ -56,7 +61,7 @@ const GenUIChat = () => {
         onSubmit={async (e) => {
           e.preventDefault();
 
-          // submit is disabled if input is empty or only whitespace or if content is still streaming
+          // // submit is disabled if input is empty or only whitespace or if content is still streaming
           if (!inputValue.trim() || isAssistantThinking) return;
 
           setLastAsstMessageId(aiState[aiState.length - 1]?.id);
@@ -66,8 +71,14 @@ const GenUIChat = () => {
           setMessages((currentMessages) => [
             ...currentMessages,
             {
-              id: Date.now(),
+              id: nanoid(),
+              role: "user",
               display: <UserMessage>{inputValue}</UserMessage>,
+            },
+            {
+              id: nanoid(),
+              role: "assistant",
+              display: <SpinnerMessage message="" />, // add SpinnerMessage
             },
           ]);
 
@@ -75,11 +86,18 @@ const GenUIChat = () => {
           setInputValue("");
 
           const responseMessage = await submitUserMessage(inputValue);
-          setMessages((currentMessages) => [
-            ...currentMessages,
-            responseMessage,
-          ]);
 
+          setMessages((currentConversation) => {
+            // remove the SpinnerMessage and add the actual response
+            const updatedMessages = currentConversation.filter(
+              (msg) =>
+                React.isValidElement(msg.display) &&
+                msg.display.type !== SpinnerMessage,
+            );
+            return [...updatedMessages, responseMessage];
+          });
+
+          setIsAssistantThinking(false);
           queryClient.invalidateQueries({ queryKey: ["ai-credits"] });
         }}
       >

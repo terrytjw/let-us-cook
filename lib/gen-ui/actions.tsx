@@ -1,14 +1,17 @@
+import "server-only";
+
 import { ReactNode } from "react";
 import {
   createAI,
   createStreamableValue,
   getMutableAIState,
-  render,
+  streamUI,
 } from "ai/rsc";
-// import { experimental_streamUI } from "ai";
-import { OpenAI } from "openai";
+import { openai } from "@ai-sdk/openai";
 import { AI_MODELS } from "../constants";
 import { z } from "zod";
+import { getCurrentUser } from "../user";
+import { decrementCredits } from "../server/decrement-credits";
 import { nanoid } from "@/lib/utils";
 
 import FlightInfoCard from "@/components/ai/gen-ui/FlightInfoCard";
@@ -18,12 +21,6 @@ import {
   BotMessage,
   SpinnerMessage,
 } from "@/components/ai/gen-ui/GenUIMessage";
-import { getCurrentUser } from "../user";
-import { decrementCredits } from "../server/decrement-credits";
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY || "",
-});
 
 const SYS_INSTRUCTIONS = `
 You are a helpful flight assistant on a flight app that talks to users like a friend. You are always concise. You are equipped with the necessary tools to help you with flight related queries and tasks. 
@@ -78,13 +75,7 @@ async function bookFlight(flightNumber: string, passengerName: string) {
   };
 }
 
-type SubmitUserMessageReturn = {
-  id: number;
-  display: React.ReactNode;
-};
-async function submitUserMessage(
-  userInput: string,
-): Promise<SubmitUserMessageReturn> {
+async function submitUserMessage(userInput: string) {
   "use server";
 
   const { user } = await getCurrentUser();
@@ -93,7 +84,7 @@ async function submitUserMessage(
     throw new Error("User not found");
   }
 
-  const aiState = getMutableAIState<typeof AI>();
+  const aiState = getMutableAIState();
 
   // update the AI state with the new user message.
   aiState.update([
@@ -101,6 +92,7 @@ async function submitUserMessage(
     ...aiState.get(),
     // append the user message to the AI state
     {
+      id: nanoid(),
       role: "user",
       content: userInput,
     },
@@ -109,16 +101,18 @@ async function submitUserMessage(
   let textStream: undefined | ReturnType<typeof createStreamableValue<string>>;
   let textNode: undefined | React.ReactNode;
 
+  // define the tools that the AI can use to perform specific tasks
+  // see https://sdk.vercel.ai/docs/reference/ai-sdk-rsc/stream-ui#tools
   const flightTools = {
+    // ---- start tool #1 ----
     get_flight_info: {
       description: "Get the information for a flight",
-      // `parameters` is a zod schema that defines the expected input for the tool.
       parameters: z
         .object({
           flightNumber: z.string().describe("the number of the flight"),
         })
         .required(),
-      render: async function* ({ flightNumber }: { flightNumber: string }) {
+      generate: async function* ({ flightNumber }: { flightNumber: string }) {
         // Show a spinner on the client while we wait for the response.
         yield (
           <div className="text-muted-foreground">
@@ -131,12 +125,12 @@ async function submitUserMessage(
 
         // Update the final AI state.
         // must call .done() when you're finished updating the AI state. This "seals" the AI state and marks it ready to be synced with the client as well as external storage
-        aiState.done([
-          ...aiState.get(),
+        // ServerMessage is a type that is used to update the AI state
+        aiState.done((messages: AIState) => [
+          ...messages,
           {
             role: "function",
             name: "get_flight_info",
-            // Content can be any string to provide context to the LLM in the rest of the conversation.
             content: JSON.stringify(flightInfo),
           },
         ]);
@@ -149,10 +143,10 @@ async function submitUserMessage(
         );
       },
     },
+    // ---- start tool #2 ----
     book_flight_successful: {
       description:
         "Get the booking details for a flight after the flight assistant makes a successful booking",
-      // `parameters` is a zod schema that defines the expected input for the tool.
       parameters: z
         .object({
           flightNumber: z
@@ -161,7 +155,7 @@ async function submitUserMessage(
           passengerName: z.string().describe("name of the passenger"),
         })
         .required(),
-      render: async function* ({
+      generate: async function* ({
         flightNumber,
         passengerName,
       }: {
@@ -189,11 +183,12 @@ async function submitUserMessage(
         const bookingResult = await bookFlight(flightNumber, passengerName);
 
         // update the final ai state with the booking result.
-        aiState.done([
-          ...aiState.get(),
+        aiState.done((messages: AIState) => [
+          ...messages,
           {
-            role: "function",
-            name: "book_flight",
+            id: nanoid(),
+            role: "assistant",
+            name: "book_flight_successful",
             // content can be any string to provide context to the llm in the rest of the conversation.
             content: JSON.stringify(bookingResult),
           },
@@ -237,21 +232,15 @@ async function submitUserMessage(
     },
   };
 
-  // `render()` creates a generated, streamable UI.
-  // TODO: `render()` is deprecated, replace to experimental_streamUI when the new docs (https://sdk.vercel.ai/docs/ai-core) are ready
-  const ui = render({
-    model: AI_MODELS.OPENAI.GPT_4_O, // GPT_3 is not very accurate at invoking the right tools
-    provider: openai,
-    temperature: 0.3, // we want the flight assistant's responses to be somewhat the same for similar user input
-    initial: <SpinnerMessage message="Assistant is thinking..." />,
-    messages: [
-      {
-        role: "system",
-        content: SYS_INSTRUCTIONS,
-      },
-      // @ts-ignore
-      ...aiState.get(),
-    ],
+  // stream UI to the client
+  const ui = await streamUI({
+    model: openai(AI_MODELS.OPENAI.GPT_4_O), // GPT_3 is not very accurate at invoking the right tools
+    temperature: 0.2, // we want the flight assistant's responses to be somewhat the same for similar user input
+    initial: <SpinnerMessage message="" />,
+    system: SYS_INSTRUCTIONS,
+    messages: [...aiState.get(), { role: "user", content: userInput }],
+    // `tools` is an object that defines a set of functions that can be called by the AI model to perform specific tasks
+    tools: flightTools,
     // `text` is called when an AI returns a text response instead of using a tool e.g. `get_flight_info`
     // the content is streamed from the LLM, so this `text` function will be called multiple times with `content` being incremental.
     text: ({ content, done, delta }) => {
@@ -262,13 +251,10 @@ async function submitUserMessage(
 
       if (done) {
         textStream.done();
-        aiState.done([
-          ...aiState.get(),
-          {
-            id: nanoid(),
-            role: "assistant",
-            content,
-          },
+
+        aiState.done((messages: AIState) => [
+          ...messages,
+          { id: nanoid(), role: "assistant", content },
         ]);
       } else {
         textStream.update(delta);
@@ -276,32 +262,29 @@ async function submitUserMessage(
 
       return textNode;
     },
-
-    // `tools` is an object that defines a set of functions that can be called by the AI model to perform specific tasks
-    tools: flightTools,
   });
 
   await decrementCredits(user.id);
 
   return {
-    id: Date.now(),
-    display: ui,
+    id: nanoid(),
+    display: ui.value,
   };
 }
 
-// Define the initial state of the AI. It can be any JSON object.
-const initialAIState: {
-  role: "user" | "assistant" | "system" | "function";
+// The AI state can be any JSON object. Here, we define the AI state as an array of messages, where each message is an object with a role, content, id, and optional name.
+type AIState = {
+  role: "user" | "assistant" | "system" | "function" | "data" | "tool";
   content: string;
-  id?: string;
+  id: string;
   name?: string;
-}[] = [];
+}[];
 
-// The initial UI state that the client will keep track of, which contains the message IDs and their UI nodes.
-const initialUIState: {
-  id: number;
+// The state of UI that the client will keep track of, which contains the message IDs and their UI nodes.
+type UIState = {
+  id: string;
   display: ReactNode;
-}[] = [];
+}[];
 
 // AI is a provider you wrap your application with so you can access AI and UI state in your components.
 export const AI = createAI({
@@ -311,6 +294,6 @@ export const AI = createAI({
   },
   // Each state can be any shape of object, but for chat applications
   // it makes sense to have an array of messages. Or you may prefer something like { id: number, messages: Message[] }
-  initialUIState,
-  initialAIState,
+  initialUIState: [] as UIState,
+  initialAIState: [] as AIState,
 });
