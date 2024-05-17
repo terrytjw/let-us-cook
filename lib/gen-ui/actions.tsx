@@ -13,6 +13,7 @@ import { z } from "zod";
 import { getCurrentUser } from "../user";
 import { decrementCredits } from "../server/decrement-credits";
 import { nanoid } from "@/lib/utils";
+import { Message } from "@/types";
 
 import FlightInfoCard from "@/components/ai/gen-ui/FlightInfoCard";
 import BookingSuccessfulCard from "@/components/ai/gen-ui/BookingSuccessfulCard";
@@ -113,6 +114,8 @@ async function submitUserMessage(userInput: string) {
         })
         .required(),
       generate: async function* ({ flightNumber }: { flightNumber: string }) {
+        // flightNumber comes from the user input, the AI model is basically calling this function with the user input
+
         // Show a spinner on the client while we wait for the response.
         yield (
           <div className="text-muted-foreground">
@@ -123,15 +126,36 @@ async function submitUserMessage(userInput: string) {
         // Fetch the flight information from an external API.
         const flightInfo = await getFlightInfo(flightNumber);
 
+        const toolCallId = nanoid();
+
         // Update the final AI state.
         // must call .done() when you're finished updating the AI state. This "seals" the AI state and marks it ready to be synced with the client as well as external storage
-        // ServerMessage is a type that is used to update the AI state
-        aiState.done((messages: AIState) => [
+        aiState.done((messages: Message[]) => [
           ...messages,
           {
-            role: "function",
-            name: "get_flight_info",
-            content: JSON.stringify(flightInfo),
+            id: nanoid(),
+            role: "assistant",
+            // content is for providing context to the llm in the rest of the conversation, different roles have different content format
+            content: [
+              {
+                type: "tool-call",
+                toolName: "get_flight_info",
+                toolCallId,
+                args: { flightNumber },
+              },
+            ],
+          },
+          {
+            id: nanoid(),
+            role: "tool",
+            content: [
+              {
+                type: "tool-result",
+                toolName: "get_flight_info",
+                toolCallId,
+                result: flightInfo,
+              },
+            ],
           },
         ]);
 
@@ -182,15 +206,35 @@ async function submitUserMessage(userInput: string) {
         // attempt to book the flight using the provided details.
         const bookingResult = await bookFlight(flightNumber, passengerName);
 
+        const toolCallId = nanoid();
+
         // update the final ai state with the booking result.
         aiState.done((messages: AIState) => [
           ...messages,
           {
             id: nanoid(),
             role: "assistant",
-            name: "book_flight_successful",
-            // content can be any string to provide context to the llm in the rest of the conversation.
-            content: JSON.stringify(bookingResult),
+            // content: JSON.stringify(bookingResult),
+            content: [
+              {
+                type: "tool-call",
+                toolName: "book_flight_successful",
+                toolCallId,
+                args: { flightNumber, passengerName },
+              },
+            ],
+          },
+          {
+            id: nanoid(),
+            role: "tool",
+            content: [
+              {
+                type: "tool-result",
+                toolName: "book_flight_successful",
+                toolCallId,
+                result: bookingResult,
+              },
+            ],
           },
         ]);
 
@@ -273,12 +317,7 @@ async function submitUserMessage(userInput: string) {
 }
 
 // The AI state can be any JSON object. Here, we define the AI state as an array of messages, where each message is an object with a role, content, id, and optional name.
-type AIState = {
-  role: "user" | "assistant" | "system" | "function" | "data" | "tool";
-  content: string;
-  id: string;
-  name?: string;
-}[];
+type AIState = Message[];
 
 // The state of UI that the client will keep track of, which contains the message IDs and their UI nodes.
 type UIState = {
@@ -287,7 +326,7 @@ type UIState = {
 }[];
 
 // AI is a provider you wrap your application with so you can access AI and UI state in your components.
-export const AI = createAI({
+export const AI = createAI<AIState, UIState>({
   // actions are the functions that the AI can call
   actions: {
     submitUserMessage,

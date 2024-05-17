@@ -21,7 +21,7 @@ const GenUIChat = () => {
 
   const [aiState] = useAIState();
   const [messages, setMessages] = useUIState<typeof AI>();
-  const { submitUserMessage } = useActions<typeof AI>();
+  const { submitUserMessage } = useActions();
 
   const [inputValue, setInputValue] = useState("");
   const [lastAsstMessageId, setLastAsstMessageId] = useState("");
@@ -37,6 +37,8 @@ const GenUIChat = () => {
       setIsAssistantThinking(false);
     }
   }, [aiState]);
+
+  console.log("aiState -> ", aiState);
 
   return (
     <main className="rounded-lg border border-secondary p-4">
