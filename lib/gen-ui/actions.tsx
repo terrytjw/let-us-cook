@@ -13,7 +13,7 @@ import { z } from "zod";
 import { getCurrentUser } from "../user";
 import { decrementCredits } from "../server/decrement-credits";
 import { nanoid } from "@/lib/utils";
-import { Message } from "@/types";
+import { Message } from "@/types/ai";
 
 import FlightInfoCard from "@/components/ai/gen-ui/FlightInfoCard";
 import BookingSuccessfulCard from "@/components/ai/gen-ui/BookingSuccessfulCard";
