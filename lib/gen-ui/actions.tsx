@@ -8,6 +8,7 @@ import {
   streamUI,
 } from "ai/rsc";
 import { openai } from "@ai-sdk/openai";
+import * as Langtrace from "@langtrase/typescript-sdk";
 import { AI_MODELS } from "../constants";
 import { z } from "zod";
 import { getCurrentUser } from "../user";
@@ -22,6 +23,10 @@ import {
   BotMessage,
   SpinnerMessage,
 } from "@/components/ai/gen-ui/GenUIMessage";
+
+Langtrace.init({
+  api_key: process.env.LANGTRACE_API_KEY || "",
+});
 
 const SYS_INSTRUCTIONS = `
 You are a helpful flight assistant on a flight app that talks to users like a friend. You are always concise. You are equipped with the necessary tools to help you with flight related queries and tasks. 
