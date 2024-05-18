@@ -7,7 +7,10 @@ import {
   getMutableAIState,
   streamUI,
 } from "ai/rsc";
-import { openai } from "@ai-sdk/openai";
+import {
+  createAnthropicProvider,
+  createOpenAIProvider,
+} from "@/lib/ai-sdk-providers";
 import { AI_MODELS } from "../constants";
 import { z } from "zod";
 import { getCurrentUser } from "../user";
@@ -214,7 +217,6 @@ async function submitUserMessage(userInput: string) {
           {
             id: nanoid(),
             role: "assistant",
-            // content: JSON.stringify(bookingResult),
             content: [
               {
                 type: "tool-call",
@@ -276,13 +278,23 @@ async function submitUserMessage(userInput: string) {
     },
   };
 
+  const openai = createOpenAIProvider(user.email || user.id);
+  // const anthropic = createAnthropicProvider(user.email || user.id);
+
   // stream UI to the client
   const ui = await streamUI({
     model: openai(AI_MODELS.OPENAI.GPT_4_O), // GPT_3 is not very accurate at invoking the right tools
+    // model: anthropic(AI_MODELS.ANTHROPIC.HAIKU),
     temperature: 0.2, // we want the flight assistant's responses to be somewhat the same for similar user input
     initial: <SpinnerMessage message="" />,
     system: SYS_INSTRUCTIONS,
-    messages: [...aiState.get(), { role: "user", content: userInput }],
+    messages: [
+      ...aiState.get().map((message: Message) => ({
+        id: message.id,
+        role: message.role,
+        content: message.content,
+      })),
+    ],
     // `tools` is an object that defines a set of functions that can be called by the AI model to perform specific tasks
     tools: flightTools,
     // `text` is called when an AI returns a text response instead of using a tool e.g. `get_flight_info`
