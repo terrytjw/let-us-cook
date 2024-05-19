@@ -9,6 +9,7 @@ import {
 } from "ai/rsc";
 import {
   createAnthropicProvider,
+  // createGoogleAIProvider,
   createOpenAIProvider,
 } from "@/lib/ai-sdk-providers";
 import { AI_MODELS } from "../constants";
@@ -25,6 +26,7 @@ import {
   BotMessage,
   SpinnerMessage,
 } from "@/components/ai/gen-ui/GenUIMessage";
+import { google } from "@ai-sdk/google";
 
 const SYS_INSTRUCTIONS = `
 You are a helpful flight assistant on a flight app that talks to users like a friend. You are always concise. You are equipped with the necessary tools to help you with flight related queries and tasks. 
@@ -280,11 +282,14 @@ async function submitUserMessage(userInput: string) {
 
   const openai = createOpenAIProvider(user.email || user.id);
   // const anthropic = createAnthropicProvider(user.email || user.id);
+  // const google = createGoogleAIProvider(user.email || user.id);
+  console.log("google ai -> ", google);
 
   // stream UI to the client
   const ui = await streamUI({
     model: openai(AI_MODELS.OPENAI.GPT_4_O), // GPT_3 is not very accurate at invoking the right tools
     // model: anthropic(AI_MODELS.ANTHROPIC.HAIKU),
+    // model: google(AI_MODELS.GOOGLE.FLASH),
     temperature: 0.2, // we want the flight assistant's responses to be somewhat the same for similar user input
     initial: <SpinnerMessage message="" />,
     system: SYS_INSTRUCTIONS,

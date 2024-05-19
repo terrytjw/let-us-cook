@@ -17,6 +17,9 @@ export const AI_MODELS = {
     GPT_4: "gpt-4-turbo",
     GPT_4_O: "gpt-4o",
   },
+  GOOGLE: {
+    FLASH: "gemini-1.5-flash-latest",
+  },
   // https://api.together.xyz/models
   TOGETHER: {
     LLAMA3_8B: "meta-llama/Llama-3-8b-chat-hf",
